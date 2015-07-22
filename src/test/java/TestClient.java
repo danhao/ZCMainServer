@@ -104,7 +104,7 @@ public class TestClient {
 
 			String drawCash = "{'code':201,'pid':'608932921935400961','sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'amount':100}}";
 			String updatPlayer = "{'code':6,'pid':'608932921935400961','sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'idFile':{'id':'615526745793105920/252d1021-bcc6-2962-f899-e74e54444a8e.png','name':'test'}}}";
-			String bidWin = "{'code':105,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'debtId':'619787660692557824','playerId':'614728266409840640'}}";
+			String bidWin = "{'code':105,'pid':619034302981607425,'sid':'f0f171dd-6ecf-4266-a619-79ffe1381b9c','req':{'debtId':'619787660692557824','playerId':'614728266409840640'}}";
 			
 			String rsp = post(bidWin);
 			System.out.println(rsp);

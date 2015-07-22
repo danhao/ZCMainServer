@@ -108,7 +108,7 @@ public class DebtService {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Debt createDebt(DebtMsg msg, Player player) throws Exception{
+	public static Debt createDebt(DebtMsg msg, Player player, boolean admin) throws Exception{
 		Debt debt = new Debt();
 		PropertyUtils.copyProperties(debt, msg);
 		
@@ -119,11 +119,15 @@ public class DebtService {
 		}
 		
 		debt.setId(IDGenerator.INSTANCE.nextId());
-//		debt.setState(Constant.STATE_PUBLISH);		// TODO test
-//		debt.setPublishTime(TimeUtil.now());	// TODO test
+		if(admin){
+			debt.setState(Constant.STATE_PUBLISH);
+			debt.setPublishTime(TimeUtil.now());
+		}
 		debt.setCreateTime(TimeUtil.now());
 		debt.setOwnerId(player.getId());
 		debt.setOwnerName(player.getName());
+		if(debt.getCreditorName().isEmpty())
+			debt.setCreditorName(player.getName());
 		
 		File file = new File();
 		PropertyUtils.copyProperties(file, msg.getCreditorIdFile());
