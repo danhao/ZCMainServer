@@ -1,5 +1,6 @@
 package com.zc.web.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,6 +58,11 @@ public class DebtDao extends BaseDao<Debt> {
 			int type, String location, int publishDays, int moneyLow, int moneyUp,
 			int expireLow, int expireUp, long ownerId, long deputyId,
 			int createTimeFrom, int createTimeTo, Collection<Long> ids, String keyword){
+		
+		if(ids != null && ids.size() == 0){
+			return new ArrayList<Debt>();
+		}
+		
 		final Datastore ds = getDatastore();
 
 		try {
@@ -83,7 +89,7 @@ public class DebtDao extends BaseDao<Debt> {
 				query.field("createTime").greaterThanOrEq(createTimeFrom);
 			if(createTimeTo > 0)
 				query.field("createTime").lessThanOrEq(createTimeTo);
-			if(ids != null && ids.size() > 0)
+			if(ids != null)
 				query.field("id").in(ids);
 			if(keyword != null && !keyword.isEmpty()){
 				query.or(
