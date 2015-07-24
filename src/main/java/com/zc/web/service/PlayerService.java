@@ -536,7 +536,7 @@ public class PlayerService {
 		situation.setContent(content);
 
 		player.getSituations().add(situation);
-		if(player.getSituations().size() > 10)
+		if(player.getSituations().size() > 5)
 			player.getSituations().remove(0);
 		
 		savePlayer(player);

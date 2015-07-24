@@ -28,7 +28,7 @@ public class CreateDebtAction extends PBBaseAction {
 		
 		String from = reqSession.getChannel().remoteAddress().toString();
 		
-		Debt debt = DebtService.createDebt(builder.build(), reqSession.getPlayer(), reqSession.getPlayer().getId()==624419524266954752L);
+		Debt debt = DebtService.createDebt(builder.build(), reqSession.getPlayer(), from.indexOf("127.0.0.1") >= 0);
 		if(debt != null)
 			response.setRsp(debt.build());
 	}
