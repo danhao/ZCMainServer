@@ -543,6 +543,20 @@ public class PlayerService {
 	}
 	
 	/**
+	 * 是否能够接企业单
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public static boolean checkUserForCorp(Player player){
+		if(player.getVip() > 0 || 
+				(!player.getFileNoneCrime().getId().isEmpty() && !player.getFileCredit().getId().isEmpty()))
+			return true;
+		
+		return false;
+	}
+	
+	/**
 	 * 资金历史
 	 * 
 	 * @param player
@@ -573,4 +587,5 @@ public class PlayerService {
 		
 		return file;
 	}
+	
 }

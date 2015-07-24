@@ -1,6 +1,10 @@
 package com.zc.web.action.debt;
 
+import java.util.Map.Entry;
+
 import com.zc.web.action.PBBaseAction;
+import com.zc.web.config.ConfigHelper;
+import com.zc.web.config.model.ConfigVip;
 import com.zc.web.core.Constant;
 import com.zc.web.core.PBRequestSession;
 import com.zc.web.data.model.Debt;
@@ -26,7 +30,8 @@ public class BidAction extends PBBaseAction {
 			PBMessage response) throws Exception {
 		
 		// 验证权限
-		PlayerService.isValidate(reqSession.getPlayer());
+		Player player = reqSession.getPlayer();
+		PlayerService.isValidate(player);
 		
 		BidReq.Builder builder = BidReq.newBuilder();
 		JsonFormat.merge(request.getReq(), builder);
@@ -37,14 +42,28 @@ public class BidAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
-		Player player = reqSession.getPlayer();
-		
 		if(debt.getOwnerId() == player.getId()){
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
 		if(DebtService.isDebtExpired(debt)){
 			throw new SmallException(ErrorCode.ERR_DEBT_EXPIRED);
+		}
+		
+		if(PlayerService.checkUserForCorp(player)){
+			throw new SmallException(ErrorCode.ERR_DEBT_NO_CORP);
+		}
+		
+		// 可以同时申请的数量
+		ConfigVip vip = ConfigHelper.getConfigVip(player.getVip());
+		int limit = (vip == null ? 100 : vip.getBidLimit());
+		int count = 0;
+		for(Entry<Long, Boolean> entry : player.getBidDebts().entrySet()){
+			if(!entry.getValue())
+				count ++;
+		}
+		if(count > limit){
+			throw new SmallException(ErrorCode.ERR_DEBT_OVER_LIMIT);
 		}
 		
 		if(!debt.getBondBidders().contains(player.getId())){

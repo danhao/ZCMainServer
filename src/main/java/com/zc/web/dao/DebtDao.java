@@ -1,5 +1,6 @@
 package com.zc.web.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -55,7 +56,7 @@ public class DebtDao extends BaseDao<Debt> {
 	public List<Debt> listDebts(int limit, int offset, String order, int state, 
 			int type, String location, int publishDays, int moneyLow, int moneyUp,
 			int expireLow, int expireUp, long ownerId, long deputyId,
-			int createTimeFrom, int createTimeTo, List<Long> ids, String keyword){
+			int createTimeFrom, int createTimeTo, Collection<Long> ids, String keyword){
 		final Datastore ds = getDatastore();
 
 		try {

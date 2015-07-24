@@ -122,6 +122,7 @@ public class DebtService {
 		if(admin){
 			debt.setState(Constant.STATE_PUBLISH);
 			debt.setPublishTime(TimeUtil.now());
+			debt.setIsCorp(1);	// 企业单
 		}
 		debt.setCreateTime(TimeUtil.now());
 		debt.setOwnerId(player.getId());
@@ -207,7 +208,7 @@ public class DebtService {
 			debt.getBidders().add(bidder);
 			DebtService.saveDebt(debt);
 			
-			player.getBidDebts().add(debt.getId());
+			player.getBidDebts().put(debt.getId(), false);
 		}else{
 			// 代理
 			boolean hasBid = false;
@@ -223,7 +224,7 @@ public class DebtService {
 				debt.getBidders().add(bidder);
 				DebtService.saveDebt(debt);
 				
-				player.getBidDebts().add(debt.getId());
+				player.getBidDebts().put(debt.getId(), false);
 			}
 		}
 		
@@ -325,6 +326,9 @@ public class DebtService {
 				continue;
 			
 			Player p = PlayerCache.INSTANCE.getPlayer(id);
+			
+			// 结束
+			p.getBidDebts().put(debt.getId(), true);
 			
 			Integer money = p.getFrozenMoney().get(debt.getId());
 			if(money == null){

@@ -30,7 +30,7 @@ public class ListSelfDebtsAction extends PBBaseAction {
 //			list = reqSession.getPlayer().getIssueDebts();
 //			break;
 		case TYPE_BID:
-			list = DebtService.getDebtDao().listDebts(SIZE, 0, "-publishTime", -1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getBidDebts(), null);
+			list = DebtService.getDebtDao().listDebts(SIZE, 0, "-publishTime", -1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getBidDebts().keySet(), null);
 			break;
 		case TYPE_WIN:
 			list = DebtService.getDebtDao().listDebts(SIZE, 0, "-publishTime", -1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getWinDebts(), null);
