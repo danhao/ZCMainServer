@@ -29,9 +29,9 @@ public class ValidateIdAction extends BaseAdminAction {
 		
 		PlayerService.savePlayer(player);
 		
-		if(!player.getFileNoneCrime().getId().isEmpty())
+		if(player.getFileNoneCrime() != null && !player.getFileNoneCrime().getId().isEmpty())
 			PlayerService.addRating(player, Constant.RATING_NONECRIME, "none crime rating");
-		if(!player.getFileCredit().getId().isEmpty())
+		if(player.getFileCredit() != null && !player.getFileCredit().getId().isEmpty())
 			PlayerService.addRating(player, Constant.RATING_CREDIT, "credit rating");
 		
 		result.put("data", player);
