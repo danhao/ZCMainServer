@@ -26,7 +26,7 @@ public class ViewDebtAction extends PBBaseAction {
 		long id = Long.parseLong(req.getParam());
 		Debt debt = DebtService.getDebtById(id);
 		if(debt != null){
-			if(reqSession.getPlayerId() != debt.getOwnerId() ||
+			if(reqSession.getPlayerId() != debt.getOwnerId() &&
 					reqSession.getPlayerId() != debt.getWinnerId()){
 				// 验证权限
 				PlayerService.isValidate(reqSession.getPlayer());
