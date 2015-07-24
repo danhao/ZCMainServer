@@ -19,9 +19,6 @@ public class ViewDebtAction extends PBBaseAction {
 	public void done(PBRequestSession reqSession, PBMessage request,
 			PBMessage response) throws Exception {
 
-		// 验证权限
-		PlayerService.isValidate(reqSession.getPlayer());
-		
 		SingleMsg.Builder builder = SingleMsg.newBuilder();
 		JsonFormat.merge(request.getReq(), builder);
 		SingleMsg req = builder.build();
@@ -31,6 +28,9 @@ public class ViewDebtAction extends PBBaseAction {
 		if(debt != null){
 			if(reqSession.getPlayerId() != debt.getOwnerId() ||
 					reqSession.getPlayerId() != debt.getWinnerId()){
+				// 验证权限
+				PlayerService.isValidate(reqSession.getPlayer());
+
 				response.setRsp(debt.build(true));
 			}else{
 				response.setRsp(debt.build());
