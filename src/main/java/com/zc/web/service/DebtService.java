@@ -145,7 +145,7 @@ public class DebtService {
 		}
 		
 		// 动态
-		PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, (debt.getType() == Constant.TYPE_BID ? "债权转让":"债务代理") + " 代理期限：" + debt.getDuration() + "天");
+		PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()));
 		
 		return debt;
 	}
@@ -325,6 +325,8 @@ public class DebtService {
 	private static void bondReturn(Debt debt, long playerId){
 		// 返还未中标用户保证金
 		int bond = debt.getMoney() * Constant.BOND / 100;	
+		if(bond > Constant.MAX_BOND)
+			bond = Constant.MAX_BOND;
 
 		for(long id : debt.getBondBidders()){
 			// 中标用户暂不返回
@@ -349,6 +351,7 @@ public class DebtService {
 			
 			p.getFrozenMoney().remove(debt.getId());
 			PlayerService.addMoney(p, bond, Constant.MONEY_TYPE_BOND_RETURN, Constant.MONEY_PLATFORM_DEFAULT, "bond return");
+			PlayerService.addSituation(p, Constant.SITUATION_BOND_RETURN, String.valueOf(debt.getId()), String.valueOf(bond));
 		}
 	}
 }

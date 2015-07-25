@@ -31,17 +31,18 @@ public class CloseDeputyDebtAction extends BaseAdminAction {
 		PlayerService.addRating(winner, Constant.RATING_CLOSE_DEAL, "close deal: " + debt.getId());
 		
 		// 返款
-		Integer money = winner.getFrozenMoney().get(debt.getId());
+		Integer bondMoney = winner.getFrozenMoney().get(debt.getId());
 		int winnerMoney = debt.getMoney() * debt.getRate() / 100;
 		int ownerMoney = debt.getMoney() - winnerMoney;
-		if(money != null)
-			winnerMoney += money;
-		PlayerService.addMoney(winner, winnerMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
-		PlayerService.addSituation(winner, Constant.SITUATION_DEBT_END, id + "结单，收到代理费用：" + winnerMoney / 100f + "元。");
+		if(bondMoney == null)
+			bondMoney = 0;
+		PlayerService.addMoney(winner, winnerMoney + bondMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
+		PlayerService.addSituation(winner, Constant.SITUATION_DEBT_END, String.valueOf(id), String.valueOf(winnerMoney));
+		PlayerService.addSituation(winner, Constant.SITUATION_BOND_RETURN, String.valueOf(id), String.valueOf(bondMoney));
 
 		Player owner = PlayerCache.INSTANCE.getPlayer(debt.getOwnerId());
 		PlayerService.addMoney(owner, ownerMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
-		PlayerService.addSituation(owner, Constant.SITUATION_DEBT_END, id + "结单，收到费用（扣除代理费用）：" + ownerMoney / 100f + "元。");
+		PlayerService.addSituation(winner, Constant.SITUATION_DEBT_END, String.valueOf(id), String.valueOf(ownerMoney));
 		
 
 	}

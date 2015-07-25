@@ -66,14 +66,6 @@ public class BidAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_OVER_LIMIT);
 		}
 		
-		if(!debt.getBondBidders().contains(player.getId())){
-			// 保证金
-			int bond = debt.getMoney() * Constant.BOND / 100;	
-			
-			player.getFrozenMoney().put(debt.getId(), bond);
-			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT);
-		}
-		
 		// 类型
 		if(debt.getType() == Constant.TYPE_BID){
 			if(req.getMoney() <= 0)
@@ -86,7 +78,17 @@ public class BidAction extends PBBaseAction {
 		}else if(debt.getType() == Constant.TYPE_DEPUTY && req.getRate() <= 0){
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
-		
+
+		if(!debt.getBondBidders().contains(player.getId())){
+			// 保证金
+			int bond = debt.getMoney() * Constant.BOND / 100;	
+			if(bond > Constant.MAX_BOND)
+				bond = Constant.MAX_BOND;
+			
+			player.getFrozenMoney().put(debt.getId(), bond);
+			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT);
+		}
+
 		DebtService.bid(player, debt, req);
 	}
 

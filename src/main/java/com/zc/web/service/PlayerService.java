@@ -1,5 +1,6 @@
 package com.zc.web.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -134,6 +135,11 @@ public class PlayerService {
 
 		// 记录注册日志
 		LogUtil.logCreatePlayer(newPlayer.getId(), newPlayer.getName());
+		
+		// 发送验证
+		if(newPlayer.getEmail() != null && !newPlayer.getEmail().isEmpty())
+			validateEmail(newPlayer);
+		
 		return newPlayer;
 	}
 
@@ -183,7 +189,7 @@ public class PlayerService {
 			return;
 		}
 
-		player.setMoney(rating + num);
+		player.setRating(rating + num);
 		if (player.getRating() < 0) {
 			player.setRating(0);
 		}
@@ -272,10 +278,10 @@ public class PlayerService {
 		String url = "http://" + MainServer.ZONE.hostOut + ":" + MainServer.ZONE.httpPort + "/req?" + 
 				player.getId() + "_" + player.getEmailValidateCode();
 		
-        StringBuffer sb=new StringBuffer("点击下面链接激活邮箱！");
+        StringBuffer sb=new StringBuffer("点击下面链接验证邮箱！");
         sb.append("<a href=\"");
         sb.append(url);
-        sb.append("\">马上激活</a><br>");
+        sb.append("\">马上验证</a><br>");
         sb.append("<a href=\"");
         sb.append(url);
         sb.append("\">");
@@ -283,7 +289,7 @@ public class PlayerService {
         sb.append("</a><br>");
 
         //发送邮件
-        SendMailThread.inst.addSyncInfo(player.getEmail(), "点点债邮箱激活", sb.toString());
+        SendMailThread.inst.addSyncInfo(player.getEmail(), "点点债邮箱验证", sb.toString());
 	}
 	
 	/**
@@ -300,9 +306,9 @@ public class PlayerService {
 			player.setStatus(player.getStatus() | Constant.USER_EMAIL_VALIDATED);
 			player.setEmailValidateCode(null);
 			savePlayer(player);
-			ret = "邮箱已激活！";
+			ret = "邮箱已验证！";
 		}else
-			ret = "激活失败!";
+			ret = "验证失败!";
 		
 		return "<html><meta charset='utf-8'><body>" + ret + "</body></html>";
 	}
@@ -531,12 +537,12 @@ public class PlayerService {
 	 * @param type
 	 * @param content
 	 */
-	public static void addSituation(Player player, int type, String content){
+	public static void addSituation(Player player, int type, String... data){
 		Situation situation = new Situation();
 		situation.setId(IDGenerator.INSTANCE.nextId());
 		situation.setType(type);
 		situation.setTime(TimeUtil.now());
-		situation.setContent(content);
+		situation.setData(Arrays.asList(data));
 
 		player.getSituations().add(situation);
 		if(player.getSituations().size() > 5)
