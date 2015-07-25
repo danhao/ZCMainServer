@@ -37,6 +37,12 @@ public class CloseDeputyDebtAction extends BaseAdminAction {
 		if(money != null)
 			winnerMoney += money;
 		PlayerService.addMoney(winner, winnerMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
-		PlayerService.addMoney(PlayerCache.INSTANCE.getPlayer(debt.getOwnerId()), ownerMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
+		PlayerService.addSituation(winner, Constant.SITUATION_DEBT_END, id + "结单，收到代理费用：" + winnerMoney / 100f + "元。");
+
+		Player owner = PlayerCache.INSTANCE.getPlayer(debt.getOwnerId());
+		PlayerService.addMoney(owner, ownerMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
+		PlayerService.addSituation(owner, Constant.SITUATION_DEBT_END, id + "结单，收到费用（扣除代理费用）：" + ownerMoney / 100f + "元。");
+		
+
 	}
 }

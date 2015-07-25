@@ -344,30 +344,30 @@ public class PlayerService {
 			player.setMobile(req.getMobile());
 		}
 		
-		if(req.getGender() > 0) player.setGender(req.getGender());
-		if(!req.getUserId().isEmpty()) player.setUserId(req.getUserId());
-		if(!req.getUserName().isEmpty()) player.setUserName(req.getUserName());
-		if(!req.getCompanyName().isEmpty()) player.setCompanyName(req.getCompanyName());
-		if(!req.getArtificialPerson().isEmpty()) player.setArtificialPerson(req.getArtificialPerson());
-		if(!req.getAddress().isEmpty()) player.setAddress(req.getAddress());
-		if(!req.getCompanyAddress().isEmpty()) player.setCompanyAddress(req.getCompanyAddress());
-		if(req.getIdFile() != null && !req.getIdFile().getId().isEmpty()) player.setFileId(createFile(req.getIdFile()));
-		if(req.getOrganizationCodeFile() != null && !req.getOrganizationCodeFile().getId().isEmpty()) player.setFileOrganizationCode(createFile(req.getOrganizationCodeFile()));
-		if(!req.getBusinessLicence().isEmpty()) player.setBusinessLicence(req.getBusinessLicence());
-		if(req.getBusinessLicenceFile() != null && !req.getBusinessLicenceFile().getId().isEmpty()) player.setFileBusinessLicence(createFile(req.getBusinessLicenceFile()));
-		if(!req.getTaxNumber().isEmpty()) player.setTaxNumber(req.getTaxNumber());
-		if(req.getTaxNumberFile() != null && !req.getTaxNumberFile().getId().isEmpty()) player.setFileTaxNumber(createFile(req.getTaxNumberFile()));
-		if(!req.getAccountPermit().isEmpty()) player.setAccountPermit(req.getAccountPermit());
-		if(req.getAccountPermitFile() != null && ! req.getAccountPermitFile().getId().isEmpty()) player.setFileAccountPermit(createFile(req.getAccountPermitFile()));
-		if(req.getCreditFile() != null && ! req.getCreditFile().getId().isEmpty()) player.setFileCredit(createFile(req.getCreditFile()));
-		if(req.getNoneCrimeFile() != null && !req.getNoneCrimeFile().getId().isEmpty()) player.setFileNoneCrime(createFile(req.getNoneCrimeFile()));
-		if(req.getRegisteredCapital() > 0) player.setRegisteredCapital(req.getRegisteredCapital());
-		if(req.getReqisteredType() > 0) player.setReqisteredType(req.getReqisteredType());
-		if(req.getFoundTime() > 0) player.setFoundTime(req.getFoundTime());
-		if(!req.getBusinessScope().isEmpty()) player.setBusinessScope(req.getBusinessScope());
-		if(!req.getBusinessAddress().isEmpty()) player.setBusinessAddress(req.getBusinessAddress());
-		if(req.getIdValidating() > 0) player.setIdValidating(req.getIdValidating());
-		if(req.getCoValidating() > 0) player.setCoValidating(req.getCoValidating());
+		if(req.hasGender()) player.setGender(req.getGender());
+		if(req.hasUserId() && !req.getUserId().isEmpty()) player.setUserId(req.getUserId());
+		if(req.hasUserName() && !req.getUserName().isEmpty()) player.setUserName(req.getUserName());
+		if(req.hasCompanyName() && !req.getCompanyName().isEmpty()) player.setCompanyName(req.getCompanyName());
+		if(req.hasArtificialPerson() && !req.getArtificialPerson().isEmpty()) player.setArtificialPerson(req.getArtificialPerson());
+		if(req.hasAddress()) player.setAddress(req.getAddress());
+		if(req.hasCompanyAddress()) player.setCompanyAddress(req.getCompanyAddress());
+		if(req.hasIdFile()) player.setFileId(createFile(req.getIdFile()));
+		if(req.hasOrganizationCodeFile()) player.setFileOrganizationCode(createFile(req.getOrganizationCodeFile()));
+		if(req.hasBusinessLicence()) player.setBusinessLicence(req.getBusinessLicence());
+		if(req.hasBusinessLicenceFile()) player.setFileBusinessLicence(createFile(req.getBusinessLicenceFile()));
+		if(req.hasTaxNumber()) player.setTaxNumber(req.getTaxNumber());
+		if(req.hasTaxNumberFile()) player.setFileTaxNumber(createFile(req.getTaxNumberFile()));
+		if(!req.hasAccountPermit()) player.setAccountPermit(req.getAccountPermit());
+		if(req.hasAccountPermitFile()) player.setFileAccountPermit(createFile(req.getAccountPermitFile()));
+		if(req.hasCreditFile()) player.setFileCredit(createFile(req.getCreditFile()));
+		if(req.hasNoneCrimeFile()) player.setFileNoneCrime(createFile(req.getNoneCrimeFile()));
+		if(req.hasRegisteredCapital()) player.setRegisteredCapital(req.getRegisteredCapital());
+		if(req.hasReqisteredType()) player.setReqisteredType(req.getReqisteredType());
+		if(req.hasFoundTime()) player.setFoundTime(req.getFoundTime());
+		if(req.hasBusinessScope()) player.setBusinessScope(req.getBusinessScope());
+		if(req.hasBusinessAddress()) player.setBusinessAddress(req.getBusinessAddress());
+		if(req.hasIdValidating()) player.setIdValidating(req.getIdValidating());
+		if(req.hasCoValidating()) player.setCoValidating(req.getCoValidating());
 				
 		
 		savePlayer(player);
@@ -552,7 +552,8 @@ public class PlayerService {
 	 */
 	public static boolean checkUserForCorp(Player player){
 		if(player.getVip() > 0 || 
-				(player.getFileNoneCrime() != null && !player.getFileNoneCrime().getId().isEmpty() 
+				((player.getStatus() & Constant.USER_ID_VALIDATED) == Constant.USER_ID_VALIDATED &&
+				player.getFileNoneCrime() != null && !player.getFileNoneCrime().getId().isEmpty() 
 						&& player.getFileCredit() != null && !player.getFileCredit().getId().isEmpty()))
 			return true;
 		

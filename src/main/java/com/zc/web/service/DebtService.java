@@ -122,7 +122,6 @@ public class DebtService {
 		if(admin){
 			debt.setState(Constant.STATE_PUBLISH);
 			debt.setPublishTime(TimeUtil.now());
-			debt.setIsCorp(1);	// 企业单
 		}
 		debt.setCreateTime(TimeUtil.now());
 		debt.setOwnerId(player.getId());
