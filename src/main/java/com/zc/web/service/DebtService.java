@@ -186,7 +186,7 @@ public class DebtService {
 	 * @param req
 	 * @throws Exception
 	 */
-	public static void bid(Player player, Debt debt, BidReq req) throws Exception{
+	public static void bid(Player player, Debt debt, int bond, BidReq req) throws Exception{
 		if(!debt.getBondBidders().contains(player.getId())){
 			// 标示交保证金
 			debt.getBondBidders().add(player.getId());
@@ -196,6 +196,7 @@ public class DebtService {
 		bidder.setId(player.getId());
 		bidder.setName(player.getName());
 		bidder.setCreateTime(TimeUtil.now());
+		bidder.setMoney(bond);
 		
 		if(req.getMoney() > 0){
 			// 投标

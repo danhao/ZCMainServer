@@ -28,6 +28,7 @@ import com.zc.web.task.SendSmsThread;
 import com.zc.web.util.LogUtil;
 import com.zc.web.util.MD5;
 import com.zc.web.util.MessageUtil;
+import com.zc.web.util.StringUtil;
 import com.zc.web.util.TimeUtil;
 
 public class PlayerService {
@@ -565,6 +566,19 @@ public class PlayerService {
 			return true;
 		
 		return false;
+	}
+	
+	/**
+	 * 获取用户
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static Player getPlayer(String value){
+		if(StringUtil.isNumeric(value)){
+			return playerDao.getPlayerByMobile(value);
+		}else
+			return playerDao.getPlayerByEmail(value);
 	}
 	
 	/**

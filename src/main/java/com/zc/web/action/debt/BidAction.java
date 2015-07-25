@@ -79,17 +79,17 @@ public class BidAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 
+		// 保证金
+		int bond = debt.getMoney() * Constant.BOND / 100;	
+		if(bond > Constant.MAX_BOND)
+			bond = Constant.MAX_BOND;
+		
 		if(!debt.getBondBidders().contains(player.getId())){
-			// 保证金
-			int bond = debt.getMoney() * Constant.BOND / 100;	
-			if(bond > Constant.MAX_BOND)
-				bond = Constant.MAX_BOND;
-			
 			player.getFrozenMoney().put(debt.getId(), bond);
 			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT);
 		}
 
-		DebtService.bid(player, debt, req);
+		DebtService.bid(player, debt, bond, req);
 	}
 
 }

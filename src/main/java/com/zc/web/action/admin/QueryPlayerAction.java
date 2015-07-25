@@ -4,12 +4,14 @@ import java.util.Map;
 
 import com.zc.web.action.BaseAdminAction;
 import com.zc.web.data.model.Player;
+import com.zc.web.service.PlayerService;
 import com.zc.web.util.FileUtil;
 
 public class QueryPlayerAction extends BaseAdminAction {
 
 	@Override
-	protected void done(String[] ps, Player player, Map<String, Object> result) {
+	protected void done(String[] ps, Player p, Map<String, Object> result) {
+		Player player = PlayerService.getPlayer(ps[0]);
 		result.put("id", player.getId());
 		result.put("name", player.getName());
 		result.put("email", player.getEmail());
@@ -21,6 +23,7 @@ public class QueryPlayerAction extends BaseAdminAction {
 		result.put("loginTime", player.getLoginTime());
 		result.put("lastLoginTime", player.getLastLoginTime());
 		result.put("banAccountTime", player.getBanAccountTime());
+		result.put("vip", player.getVip());
 		result.put("userId", player.getUserId());		// 用户身份证/组织机构代码
 		result.put("userName", player.getUserName());	// 用户真实姓名/企业名称
 		result.put("artificialPerson", player.getArtificialPerson());	// 法人
