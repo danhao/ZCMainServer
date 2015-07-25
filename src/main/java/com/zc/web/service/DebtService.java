@@ -34,7 +34,7 @@ public class DebtService {
 	private static List<Debt> latestDebts = new ArrayList<Debt>();
 	
 	// 最新债务的数量
-	private static final int SIZE = 10;
+	private static final int SIZE = 12;
 	
 	// 总的数量，定时刷新
 	public static long TOTAL_DEBTS = 0;
