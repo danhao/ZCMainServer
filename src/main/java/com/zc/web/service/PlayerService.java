@@ -164,7 +164,7 @@ public class PlayerService {
 		
 		LogUtil.logAddMoney(player.getId(), addMoney, money, player.getMoney(), extraMsg);
 		
-		createMoneyHistory(player, addMoney, type, platform, Constant.MONEY_STATE_SUCC, extraMsg != null?extraMsg[0]:"");
+		createMoneyHistory(player, addMoney, type, platform, Constant.MONEY_STATE_SUCC, (extraMsg != null && extraMsg.length > 0)?extraMsg[0]:"");
 	}
 	
 	/**
@@ -366,6 +366,8 @@ public class PlayerService {
 		if(req.getFoundTime() > 0) player.setFoundTime(req.getFoundTime());
 		if(!req.getBusinessScope().isEmpty()) player.setBusinessScope(req.getBusinessScope());
 		if(!req.getBusinessAddress().isEmpty()) player.setBusinessAddress(req.getBusinessAddress());
+		if(req.getIdValidating() > 0) player.setIdValidating(req.getIdValidating());
+		if(req.getCoValidating() > 0) player.setCoValidating(req.getCoValidating());
 				
 		
 		savePlayer(player);

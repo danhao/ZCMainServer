@@ -18,6 +18,11 @@ public class CloseDeputyDebtAction extends BaseAdminAction {
 		
 		// 修改状态
 		Debt debt = DebtService.getDebtById(id);
+		
+		if(!(debt.getState() == Constant.STATE_DEALED && debt.getType() == Constant.TYPE_DEPUTY)){
+			throw new Exception();
+		}
+		
 		debt.setState(Constant.STATE_CLOSED);
 		DebtService.saveDebt(debt);
 		
