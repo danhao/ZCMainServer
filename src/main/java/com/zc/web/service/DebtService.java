@@ -254,6 +254,13 @@ public class DebtService {
 		debt.setWinnerId(winnerId);
 		debt.setWinnerName(winner.getName());
 		debt.setState(Constant.STATE_DEALED);
+		for(Bidder b : debt.getBidders()){
+			if(b.getId() == winnerId){
+				debt.setRate(b.getRate());
+				break;
+			}
+		}
+
 		saveDebt(debt);
 		
 		winner.getWinDebts().add(debt.getId());
