@@ -368,6 +368,7 @@ public class PlayerService {
 		if(req.hasBusinessAddress()) player.setBusinessAddress(req.getBusinessAddress());
 		if(req.hasIdValidating()) player.setIdValidating(req.getIdValidating());
 		if(req.hasCoValidating()) player.setCoValidating(req.getCoValidating());
+		if(req.hasHead()) player.setHead(req.getHead());
 				
 		
 		savePlayer(player);
