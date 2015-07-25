@@ -586,7 +586,7 @@ public class PlayerService {
 		history.setPlatform(platform);
 		history.setTime(TimeUtil.now());
 		history.setState(state);
-		history.setMoney(player.getMoney());
+		history.setBalance(player.getMoney());
 		history.setDescript(descript);
 		
 		player.getHistories().add(history);
