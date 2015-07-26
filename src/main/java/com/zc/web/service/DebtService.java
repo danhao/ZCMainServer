@@ -145,7 +145,7 @@ public class DebtService {
 		}
 		
 		// 动态
-		PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()));
+		PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
 		
 		return debt;
 	}
@@ -172,7 +172,7 @@ public class DebtService {
 			ids = new ArrayList<Long>();
 			ids.add(id);
 		}
-		return debtDao.listDebts(SIZE, (page - 1) * SIZE, order, req.getState(), req.getType(), req.getLocation(),
+		return debtDao.listDebts(SIZE, (page - 1) * SIZE, order, req.hasState() ? req.getState() : -1, req.getType(), req.getLocation(),
 				req.getPublishDays(), req.getMoneyLow(), req.getMoneyUp(),
 				req.getExpireLow(), req.getExpireUp(), ownerId, deputyId,
 				req.getCreateTimeFrom(), req.getCreateTimeTo(), ids, req.getKeyword());

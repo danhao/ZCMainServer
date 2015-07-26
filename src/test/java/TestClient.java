@@ -65,9 +65,9 @@ public class TestClient {
 			String createUser = "{'code':2,'req':{'mobile':'133','email':'中文'}}";
 			String login = "{'code':1,'req':{'mobile':'127','passwd':'1111'}}";
 			String bid = "{'code':104,'pid':607097386459729920,'sid':'5d77fa8b-ab67-4ea7-994d-f080fcbf3e4f','req':{'id':'607095292373766144','money':100}}";
-			String createDebt = "{'code':100,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'money':1014,'creditorName':'haha','files':{'id':'11','name':'test'}}}";
+			String createDebt = "{'code':100,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:2,'money':1014,'creditorName':'haha','files':{'id':'11','name':'test'}}}";
 			String listViewDebts = "{'code':103}"; 
-			String listDebts = "{'code':101,'pid':'608932921935400961','sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'state':-1}}";
+			String listDebts = "{'code':101,'pid':'619797168072429568','sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:2,state:1,moneyLow:100,moneyUp:1000000,page:20}}";
 			String viewDebt = "{'code':102,'pid':'611160765428142080','sid':'c6b07848-835e-4dab-a847-f2232be581bd','req':{'param':'614690808892755969'}}";
 			String addMessage = "{'code':106,'pid':'607120585767522305','sid':'76085f2b-c46f-4575-855e-6fed59e54d47','req':{'id':'607095292373766144','memo':'xxx'}}";
 			String listSelfDebts = "{'code':107,'pid':'607120585767522305','sid':'76085f2b-c46f-4575-855e-6fed59e54d47','req':{'param':'1'}}";
@@ -106,7 +106,7 @@ public class TestClient {
 			String updatPlayer = "{'code':6,'pid':'608932921935400961','sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'idFile':{'id':'615526745793105920/252d1021-bcc6-2962-f899-e74e54444a8e.png','name':'test'}}}";
 			String bidWin = "{'code':105,'pid':619034302981607425,'sid':'f0f171dd-6ecf-4266-a619-79ffe1381b9c','req':{'debtId':'619787660692557824','playerId':'614728266409840640'}}";
 			
-			String rsp = post(bidWin);
+			String rsp = post(listDebts);
 			System.out.println(rsp);
 		} catch (Exception e) {
 			e.printStackTrace();
