@@ -279,10 +279,10 @@ public class PlayerService {
 		String url = "http://" + MainServer.ZONE.hostOut + ":" + MainServer.ZONE.httpPort + "/req?" + 
 				player.getId() + "_" + player.getEmailValidateCode();
 		
-        StringBuffer sb=new StringBuffer("点击下面链接验证邮箱！");
+        StringBuffer sb=new StringBuffer("点击下面链接激活账号！");
         sb.append("<a href=\"");
         sb.append(url);
-        sb.append("\">马上验证</a><br>");
+        sb.append("\">马上激活</a><br>");
         sb.append("<a href=\"");
         sb.append(url);
         sb.append("\">");
@@ -290,7 +290,7 @@ public class PlayerService {
         sb.append("</a><br>");
 
         //发送邮件
-        SendMailThread.inst.addSyncInfo(player.getEmail(), "点点债邮箱验证", sb.toString());
+        SendMailThread.inst.addSyncInfo(player.getEmail(), "点点债平台账号激活", sb.toString());
 	}
 	
 	/**
@@ -377,6 +377,7 @@ public class PlayerService {
 		if(req.hasCoValidating()) player.setCoValidating(req.getCoValidating());
 		if(req.hasHead()) player.setHead(req.getHead());
 		if(req.hasFiveInOne()) player.setFiveInOne(req.getFiveInOne());
+		if(req.hasDescript()) player.setDescript(req.getDescript());
 				
 		
 		savePlayer(player);
