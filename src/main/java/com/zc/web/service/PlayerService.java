@@ -364,7 +364,7 @@ public class PlayerService {
 		if(req.hasBusinessLicenceFile()) player.setFileBusinessLicence(createFile(req.getBusinessLicenceFile()));
 		if(req.hasTaxNumber()) player.setTaxNumber(req.getTaxNumber());
 		if(req.hasTaxNumberFile()) player.setFileTaxNumber(createFile(req.getTaxNumberFile()));
-		if(!req.hasAccountPermit()) player.setAccountPermit(req.getAccountPermit());
+		if(req.hasAccountPermit()) player.setAccountPermit(req.getAccountPermit());
 		if(req.hasAccountPermitFile()) player.setFileAccountPermit(createFile(req.getAccountPermitFile()));
 		if(req.hasCreditFile()) player.setFileCredit(createFile(req.getCreditFile()));
 		if(req.hasNoneCrimeFile()) player.setFileNoneCrime(createFile(req.getNoneCrimeFile()));
