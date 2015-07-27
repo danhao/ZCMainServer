@@ -37,6 +37,9 @@ public class SendMailThread extends Thread {
 	 * @throws InterruptedException 
 	 */
 	public void addSyncInfo(String toEmail, String title, String content) throws InterruptedException {
+		if(toEmail == null || toEmail.isEmpty())
+			return;
+		
 		MailInfo info = new MailInfo();
 		info.setToEmail(toEmail);
 		info.setTitle(title);

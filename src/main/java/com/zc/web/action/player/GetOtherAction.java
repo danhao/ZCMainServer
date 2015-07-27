@@ -1,6 +1,7 @@
 package com.zc.web.action.player;
 
 import com.zc.web.action.PBBaseAction;
+import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.PBRequestSession;
 import com.zc.web.data.model.Player;
 import com.zc.web.message.PBMessage;
@@ -23,7 +24,8 @@ public class GetOtherAction extends PBBaseAction {
 		
 		SingleMsg req = (SingleMsg)getReq(request, SingleMsg.newBuilder());
 
-		Player player = PlayerService.loadPlayerById(Long.parseLong(req.getParam()));
+//		Player player = PlayerService.loadPlayerById(Long.parseLong(req.getParam()));
+		Player player = PlayerCache.INSTANCE.getPlayer(Long.parseLong(req.getParam()));
 		
 		SimplePlayerMsg.Builder sp = SimplePlayerMsg.newBuilder();
 		PropUtil.copyProperties(sp, player, SimplePlayerMsg.Builder.getDescriptor());

@@ -16,7 +16,7 @@ public class ValidateIdAction extends BaseAdminAction {
 		if(state == 0){
 			player.setStatus(state);
 		}else if (state < 0){
-			player.setStatus(player.getStatus() & -state);
+			player.setStatus(player.getStatus() & (~(-state)));
 		}else{
 			player.setStatus(player.getStatus() | state);
 			player.setValidateTime(TimeUtil.now());

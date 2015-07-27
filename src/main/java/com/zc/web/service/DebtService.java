@@ -22,6 +22,8 @@ import com.zc.web.message.debt.BidReqProto.BidReq;
 import com.zc.web.message.debt.DebtMsgProto.DebtMsg;
 import com.zc.web.message.debt.ListDebtsReqProto.ListDebtsReq;
 import com.zc.web.message.debt.MessageMsgProto.MessageMsg;
+import com.zc.web.task.SendMailThread;
+import com.zc.web.task.SendSmsThread;
 import com.zc.web.task.UploadThread;
 import com.zc.web.util.TimeUtil;
 
@@ -272,6 +274,11 @@ public class DebtService {
 		
 		// 生成协议
 		UploadThread.inst.addSyncInfo(debt);
+		
+		// 提醒
+		String content = "恭喜中标债务，编号" + debt.getId() + "，金额" + (debt.getMoney() / 100f) + "元，请登录<a href='http://www.ddzhai.cn'>点点债</a>确认！";
+		SendSmsThread.inst.addSyncInfo(winner.getMobile(), content);
+		SendMailThread.inst.addSyncInfo(winner.getEmail(), "中标提醒", content);
 		
 		return debt;
 	}

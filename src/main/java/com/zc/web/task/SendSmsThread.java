@@ -36,6 +36,9 @@ public class SendSmsThread extends Thread {
 	 * @throws InterruptedException 
 	 */
 	public void addSyncInfo(String mobile, String content) throws InterruptedException {
+		if(mobile == null || mobile.isEmpty())
+			return;
+		
 		SmsInfo info = new SmsInfo();
 		info.setMobile(mobile);
 		info.setContent(content);

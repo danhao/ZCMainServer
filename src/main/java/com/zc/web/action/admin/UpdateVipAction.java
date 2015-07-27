@@ -12,7 +12,5 @@ public class UpdateVipAction extends BaseAdminAction {
 	protected void done(String[] ps, Player player, Map<String, Object> result) {
 		player.setVip(Integer.parseInt(ps[0]));
 		PlayerService.savePlayer(player);
-		
-		result.put("data", player);
 	}
 }

@@ -9,6 +9,8 @@ import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.Player;
 import com.zc.web.service.DebtService;
 import com.zc.web.service.PlayerService;
+import com.zc.web.task.SendMailThread;
+import com.zc.web.task.SendSmsThread;
 
 public class CloseDeputyDebtAction extends BaseAdminAction {
 
@@ -45,6 +47,15 @@ public class CloseDeputyDebtAction extends BaseAdminAction {
 		Player owner = PlayerCache.INSTANCE.getPlayer(debt.getOwnerId());
 		PlayerService.addMoney(owner, ownerMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
 		PlayerService.addSituation(winner, Constant.SITUATION_DEBT_END, String.valueOf(id), String.valueOf(ownerMoney));
+		
+		// 提醒
+		String content = "恭喜完成债务（编号" + debt.getId() + "），佣金（扣除平台服务费）" + (winnerMoney / 100f) + "元已到账，请登录<a href='http://www.ddzhai.cn'>点点债</a>确认！";
+		SendSmsThread.inst.addSyncInfo(winner.getMobile(), content);
+		SendMailThread.inst.addSyncInfo(winner.getEmail(), "结单提醒", content);
+		
+		content = "您的债务（编号" + debt.getId() + "）已成功结束，回款（扣除佣金）" + (ownerMoney / 100f) + "元已到账，请登录<a href='http://www.ddzhai.cn'>点点债</a>确认！";
+		SendSmsThread.inst.addSyncInfo(owner.getMobile(), content);
+		SendMailThread.inst.addSyncInfo(owner.getEmail(), "结单提醒", content);
 		
 
 	}
