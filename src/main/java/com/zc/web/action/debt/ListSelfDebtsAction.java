@@ -6,7 +6,7 @@ import com.zc.web.action.PBBaseAction;
 import com.zc.web.core.PBRequestSession;
 import com.zc.web.data.model.Debt;
 import com.zc.web.message.PBMessage;
-import com.zc.web.message.common.SingleMsgProto.SingleMsg;
+import com.zc.web.message.debt.ListDebtsReqProto.ListDebtsReq;
 import com.zc.web.message.debt.ListDebtsRspProto.ListDebtsRsp;
 import com.zc.web.message.debt.ListDebtsRspProto.ListDebtsRsp.SimpleDebtMsg;
 import com.zc.web.service.DebtService;
@@ -14,26 +14,21 @@ import com.zc.web.util.PropUtil;
 
 public class ListSelfDebtsAction extends PBBaseAction {
 
-	private static final int TYPE_SELF = 1;
 	private static final int TYPE_BID = 2;
 	private static final int TYPE_WIN = 3;
 	
-	private static final int SIZE = 50;
 	@Override
 	public void done(PBRequestSession reqSession, PBMessage request,
 			PBMessage response) throws Exception {
-		SingleMsg req = (SingleMsg)getReq(request, SingleMsg.newBuilder());
+		ListDebtsReq req = (ListDebtsReq)getReq(request, ListDebtsReq.newBuilder());
 
 		List<Debt> list = null;
-		switch(Integer.parseInt(req.getParam())){
-//		case TYPE_SELF:
-//			list = reqSession.getPlayer().getIssueDebts();
-//			break;
+		switch(req.getQueryType()){
 		case TYPE_BID:
-			list = DebtService.getDebtDao().listDebts(SIZE, 0, "-publishTime", -1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getBidDebts().keySet(), null);
+			list = DebtService.getDebtDao().listDebts(DebtService.SIZE, (req.getPage() - 1) * DebtService.SIZE, "-publishTime", -1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getBidDebts().keySet(), null);
 			break;
 		case TYPE_WIN:
-			list = DebtService.getDebtDao().listDebts(SIZE, 0, "-publishTime", -1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getWinDebts(), null);
+			list = DebtService.getDebtDao().listDebts(DebtService.SIZE, (req.getPage() - 1) * DebtService.SIZE, "-publishTime", -1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getWinDebts(), null);
 			break;
 		}
 		
