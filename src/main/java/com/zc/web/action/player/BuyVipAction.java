@@ -19,17 +19,17 @@ public class BuyVipAction extends PBBaseAction {
 			PBMessage response) throws Exception {
 		SingleMsg req = (SingleMsg)getReq(request, SingleMsg.newBuilder());
 		
-		ConfigVip config = ConfigHelper.getConfigVip(Integer.parseInt(req.getParam()));
+		ConfigVip config = ConfigHelper.getConfigVip(1);
 		if(config == null){
 			throw new SmallException(ErrorCode.ERR_SYSTEM);
 		}
 		
 		Player player = reqSession.getPlayer();
 		int money = 0;
-		if((player.getStatus() | Constant.USER_ID_VALIDATED) == Constant.USER_ID_VALIDATED)
-			money = config.getCost();
+		if(req.getParam().equals("0"))
+			money = config.getCost() * 100;
 		else
-			money = config.getCostCo();
+			money = config.getCostCo() * 100;
 		PlayerService.consumeMoney(player, money, Constant.MONEY_TYPE_BUY_VIP, Constant.MONEY_PLATFORM_DEFAULT);
 		
 		player.setVip(config.getLevel());
