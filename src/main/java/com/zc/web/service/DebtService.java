@@ -199,6 +199,7 @@ public class DebtService {
 		bidder.setName(player.getName());
 		bidder.setCreateTime(TimeUtil.now());
 		bidder.setMoney(bond);
+		bidder.setHead(player.getHead());
 		
 		if(req.getMoney() > 0){
 			// 投标
@@ -255,6 +256,7 @@ public class DebtService {
 		Player winner = PlayerCache.INSTANCE.getPlayer(winnerId);
 		debt.setWinnerId(winnerId);
 		debt.setWinnerName(winner.getName());
+		debt.setWinnerHead(winner.getHead());
 		debt.setState(Constant.STATE_DEALED);
 		for(Bidder b : debt.getBidders()){
 			if(b.getId() == winnerId){
