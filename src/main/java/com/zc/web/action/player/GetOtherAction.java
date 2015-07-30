@@ -8,6 +8,7 @@ import com.zc.web.message.PBMessage;
 import com.zc.web.message.common.SingleMsgProto.SingleMsg;
 import com.zc.web.message.player.SimplePlayerMsgProto.SimplePlayerMsg;
 import com.zc.web.service.PlayerService;
+import com.zc.web.util.FileUtil;
 import com.zc.web.util.PropUtil;
 
 /**
@@ -24,11 +25,12 @@ public class GetOtherAction extends PBBaseAction {
 		
 		SingleMsg req = (SingleMsg)getReq(request, SingleMsg.newBuilder());
 
-//		Player player = PlayerService.loadPlayerById(Long.parseLong(req.getParam()));
 		Player player = PlayerCache.INSTANCE.getPlayer(Long.parseLong(req.getParam()));
 		
 		SimplePlayerMsg.Builder sp = SimplePlayerMsg.newBuilder();
 		PropUtil.copyProperties(sp, player, SimplePlayerMsg.Builder.getDescriptor());
+		if(player.getHead() != null && !player.getHead().isEmpty())
+			sp.setHead(FileUtil.genDownloadUrl(player.getHead()));
 		
 		response.setRsp(sp.build());
 	}
