@@ -25,10 +25,10 @@ public class ListSelfDebtsAction extends PBBaseAction {
 		List<Debt> list = null;
 		switch(req.getQueryType()){
 		case TYPE_BID:
-			list = DebtService.getDebtDao().listDebts(DebtService.SIZE, (req.getPage() - 1) * DebtService.SIZE, "-publishTime", req.getState(), 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getBidDebts().keySet(), null);
+			list = DebtService.getDebtDao().listDebts(DebtService.SIZE, (req.getPage() - 1) * DebtService.SIZE, "-publishTime", req.getState(), req.getType(), null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getBidDebts().keySet(), null);
 			break;
 		case TYPE_WIN:
-			list = DebtService.getDebtDao().listDebts(DebtService.SIZE, (req.getPage() - 1) * DebtService.SIZE, "-publishTime", req.getState(), 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getWinDebts(), null);
+			list = DebtService.getDebtDao().listDebts(DebtService.SIZE, (req.getPage() - 1) * DebtService.SIZE, "-publishTime", req.getState(), req.getType(), null, 0, 0, 0, 0, 0, 0, 0, 0, 0, reqSession.getPlayer().getWinDebts(), null);
 			break;
 		}
 		
