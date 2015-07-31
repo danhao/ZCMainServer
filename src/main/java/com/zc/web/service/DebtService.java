@@ -1,6 +1,8 @@
 package com.zc.web.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -57,7 +59,7 @@ public class DebtService {
 	 * @param id
 	 * @return
 	 */
-	public static Debt getDebtById(long id) {
+	public static Debt getDebtById(long id) throws Exception{
 		Debt debt = debtDao.getDebt(id);
 		
 		// 检查状态
@@ -79,10 +81,44 @@ public class DebtService {
 				break;
 			case Constant.TYPE_DEPUTY:
 				if(debt.getState() != Constant.STATE_DEALED){
-					debt.setState(Constant.STATE_CLOSED);
-					
-					// 返还保证金
-					bondReturn(debt, 0);
+					if(debt.getBidders().size() == 0){
+						// 无人应标
+						debt.setState(Constant.STATE_CLOSED);
+						
+						// 返还保证金
+						bondReturn(debt, 0);
+					}else{
+						// 自动选择
+						if(debt.getIsCorp() == 0){
+							// 个人单
+							Collections.sort(debt.getBidders(),
+									new Comparator<Bidder>() {
+										@Override
+										public int compare(Bidder b1, Bidder b2) {
+											return Integer
+													.valueOf(b1.getRate())
+													.compareTo(
+															Integer.valueOf(b2
+																	.getRate()));
+										}
+									});
+						}else{
+							// 企业单
+							Collections.sort(debt.getBidders(),
+									new Comparator<Bidder>() {
+										@Override
+										public int compare(Bidder b1, Bidder b2) {
+											return Integer
+													.valueOf(b2.getRating())
+													.compareTo(
+															Integer.valueOf(b1
+																	.getRating()));
+										}
+									});
+						}
+						
+						bidWin(debt.getOwnerId(), debt.getId(), debt.getBidders().get(0).getId());
+					}
 				}
 				break;
 			}
@@ -123,6 +159,7 @@ public class DebtService {
 		debt.setId(IDGenerator.INSTANCE.nextId());
 		if(admin){
 			debt.setState(Constant.STATE_PUBLISH);
+			debt.setIsCorp(1);
 			debt.setPublishTime(TimeUtil.now());
 		}
 		debt.setCreateTime(TimeUtil.now());
