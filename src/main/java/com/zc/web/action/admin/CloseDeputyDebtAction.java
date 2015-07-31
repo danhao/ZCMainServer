@@ -6,6 +6,7 @@ import com.zc.web.action.BaseAdminAction;
 import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.Constant;
 import com.zc.web.data.model.Debt;
+import com.zc.web.data.model.Debt.Repayment;
 import com.zc.web.data.model.Player;
 import com.zc.web.service.DebtService;
 import com.zc.web.service.PlayerService;
@@ -32,12 +33,18 @@ public class CloseDeputyDebtAction extends BaseAdminAction {
 		Player winner = PlayerCache.INSTANCE.getPlayer(debt.getWinnerId());
 		PlayerService.addRating(winner, Constant.RATING_CLOSE_DEAL, "close deal: " + debt.getId());
 		
+		// 收到的回款
+		int money = 0;
+		for(Repayment pay : debt.getRepayments()){
+			money += pay.getMoney();
+		}
+		
 		// 返款
 		Integer bondMoney = winner.getFrozenMoney().get(debt.getId());
-		int winnerMoney = debt.getMoney() * debt.getRate() / 100;
+		int winnerMoney = money * debt.getRate() / 100;
 		int serviceFee = winnerMoney * Constant.SERVICE_FEE / 100;
 		winnerMoney -= serviceFee;
-		int ownerMoney = debt.getMoney() - winnerMoney;
+		int ownerMoney = money - winnerMoney;
 		if(bondMoney == null)
 			bondMoney = 0;
 		PlayerService.addMoney(winner, winnerMoney + bondMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);

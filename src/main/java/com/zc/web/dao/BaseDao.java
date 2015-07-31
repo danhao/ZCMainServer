@@ -10,6 +10,8 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.logging.MorphiaLoggerFactory;
 import com.google.code.morphia.logging.slf4j.SLF4JLogrImplFactory;
+import com.google.code.morphia.query.Query;
+import com.google.code.morphia.query.UpdateOperations;
 import com.mongodb.DB;
 import com.mongodb.DBAddress;
 import com.mongodb.Mongo;
@@ -104,4 +106,34 @@ public abstract class BaseDao<T extends BaseModel> {
 			throw new DBException(e);
 		}
 	}
+	
+	/**
+	 * 更新
+	 * 
+	 * @param model
+	 * @param query
+	 * @param ops
+	 */
+	public void update(Query<T> query, UpdateOperations<T> ops) {
+		final Datastore ds = getDatastore();
+		try {
+			ds.update(query, ops);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+	}	
+	
+	/**
+	 * 删除
+	 * 
+	 * @param object
+	 */
+	public void delete(Query<T> query) {
+		final Datastore ds = getDatastore();
+		try {
+			ds.delete(query);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+	}	
 }

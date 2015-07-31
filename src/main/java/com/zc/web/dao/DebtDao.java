@@ -8,8 +8,13 @@ import org.apache.log4j.Logger;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.query.Query;
+import com.google.code.morphia.query.UpdateOperations;
 import com.zc.web.core.Constant;
+import com.zc.web.data.model.BaseModel;
 import com.zc.web.data.model.Debt;
+import com.zc.web.data.model.Debt.Bidder;
+import com.zc.web.data.model.Debt.Message;
+import com.zc.web.data.model.Debt.Repayment;
 import com.zc.web.exception.DBException;
 import com.zc.web.util.TimeUtil;
 
@@ -106,4 +111,47 @@ public class DebtDao extends BaseDao<Debt> {
 			throw new DBException(e);
 		} 
 	}
+	
+	public void addBidder(long id, Bidder bidder) {
+		try {
+			final Datastore ds = getDatastore();
+			
+			Query<Debt> query = ds.find(Debt.class).field(BaseModel.ID_KEY).equal(id);
+			UpdateOperations<Debt> ops = ds.createUpdateOperations(Debt.class).disableValidation();
+			
+			ops.add("bidders", bidder);
+			update(query, ops);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	public void updateMessages(long id, List<Message> messages) {
+		try {
+			final Datastore ds = getDatastore();
+			
+			Query<Debt> query = ds.find(Debt.class).field(BaseModel.ID_KEY).equal(id);
+			UpdateOperations<Debt> ops = ds.createUpdateOperations(Debt.class).disableValidation();
+			
+			ops.set("messages", messages);
+			update(query, ops);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
+	public void addRepayment(long id, Repayment pay) {
+		try {
+			final Datastore ds = getDatastore();
+			
+			Query<Debt> query = ds.find(Debt.class).field(BaseModel.ID_KEY).equal(id);
+			UpdateOperations<Debt> ops = ds.createUpdateOperations(Debt.class).disableValidation();
+			
+			ops.add("repayments", pay);
+			update(query, ops);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+	}
+	
 }
