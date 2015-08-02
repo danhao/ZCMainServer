@@ -29,9 +29,7 @@ public class ViewDebtAction extends PBBaseAction {
 
 				response.setRsp(debt.build(true, false));
 			}else{
-				response.setRsp(debt.build(false, reqSession.getPlayerId() == debt.getOwnerId()));
-				
-				
+				response.setRsp(debt.build(false, reqSession.getPlayerId() == debt.getWinnerId()));
 			}
 		}
 	}
