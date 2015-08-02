@@ -47,6 +47,8 @@ public class CloseDeputyDebtAction extends BaseAdminAction {
 		int ownerMoney = money - winnerMoney;
 		if(bondMoney == null)
 			bondMoney = 0;
+		else
+			winner.getFrozenMoney().remove(debt.getId());
 		PlayerService.addMoney(winner, winnerMoney + bondMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
 		PlayerService.addSituation(winner, Constant.SITUATION_DEBT_END, String.valueOf(id), String.valueOf(winnerMoney), String.valueOf(serviceFee));
 		PlayerService.addSituation(winner, Constant.SITUATION_BOND_RETURN, String.valueOf(id), String.valueOf(bondMoney));

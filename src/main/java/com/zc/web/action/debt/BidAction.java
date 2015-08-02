@@ -89,7 +89,9 @@ public class BidAction extends PBBaseAction {
 			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT);
 		}
 
-		DebtService.bid(player, debt, bond, req);
+		DebtService.bid(player, debt, bond, req.getMoney(), req.getRate());
+		
+		PlayerService.savePlayer(player);
 	}
 
 }

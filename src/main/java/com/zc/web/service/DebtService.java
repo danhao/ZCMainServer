@@ -225,7 +225,7 @@ public class DebtService {
 	 * @param req
 	 * @throws Exception
 	 */
-	public static void bid(Player player, Debt debt, int bond, BidReq req) throws Exception{
+	public static void bid(Player player, Debt debt, int bond, int money, int rate) throws Exception{
 		if(!debt.getBondBidders().contains(player.getId())){
 			// 标示交保证金
 			debt.getBondBidders().add(player.getId());
@@ -238,11 +238,11 @@ public class DebtService {
 		bidder.setMoney(bond);
 		bidder.setHead(player.getHead());
 		
-		if(req.getMoney() > 0){
+		if(money > 0){
 			// 投标
-			bidder.setMoney(req.getMoney());
-			if(req.getMoney() > debt.getBidMoney()){
-				debt.setBidMoney(req.getMoney());
+			bidder.setMoney(money);
+			if(money > debt.getBidMoney()){
+				debt.setBidMoney(money);
 				debt.setBidId(player.getId());
 			}
 			debt.getBidders().add(bidder);
@@ -260,15 +260,13 @@ public class DebtService {
 			}
 			
 			if(!hasBid){
-				bidder.setRate(req.getRate());
+				bidder.setRate(rate);
 				debt.getBidders().add(bidder);
 				DebtService.saveDebt(debt);
 				
 				player.getBidDebts().put(debt.getId(), false);
 			}
 		}
-		
-		PlayerService.savePlayer(player);
 	}
 	
 	/**
@@ -354,7 +352,7 @@ public class DebtService {
 		PropertyUtils.copyProperties(message, msg);
 		
 		debt.getMessages().add(message);
-		if(debt.getMessages().size() > 20)
+		if(debt.getMessages().size() > Constant.MAX_MESSAGE)
 			debt.getMessages().remove(0);
 		saveDebt(debt);
 	}

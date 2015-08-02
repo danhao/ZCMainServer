@@ -105,8 +105,11 @@ public class TestClient {
 			String drawCash = "{'code':201,'pid':'608932921935400961','sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'amount':100}}";
 			String updatPlayer = "{'code':6,'pid':'608932921935400961','sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'idFile':{'id':'615526745793105920/252d1021-bcc6-2962-f899-e74e54444a8e.png','name':'test'}}}";
 			String bidWin = "{'code':105,'pid':619034302981607425,'sid':'f0f171dd-6ecf-4266-a619-79ffe1381b9c','req':{'debtId':'619787660692557824','playerId':'614728266409840640'}}";
-			
-			String rsp = post(listDebts);
+			String batchBbid = "{'code':108,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'id':['619787660692557824'],'bond':101,'rate':10}}";
+			String upload = "{'code':18,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'id':['1111'],'name':'test'}}";
+			String returnDebt = "{'code':109,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'param':'619787660692557824'}}";
+
+			String rsp = post(returnDebt);
 			System.out.println(rsp);
 		} catch (Exception e) {
 			e.printStackTrace();

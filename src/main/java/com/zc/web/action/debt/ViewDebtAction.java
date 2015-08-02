@@ -27,9 +27,11 @@ public class ViewDebtAction extends PBBaseAction {
 				// 验证权限
 				PlayerService.isValidate(reqSession.getPlayer());
 
-				response.setRsp(debt.build(true));
+				response.setRsp(debt.build(true, false));
 			}else{
-				response.setRsp(debt.build());
+				response.setRsp(debt.build(false, reqSession.getPlayerId() == debt.getOwnerId()));
+				
+				
 			}
 		}
 	}
