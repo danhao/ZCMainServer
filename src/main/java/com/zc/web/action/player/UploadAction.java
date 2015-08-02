@@ -8,6 +8,7 @@ import com.zc.web.data.model.File;
 import com.zc.web.message.PBMessage;
 import com.zc.web.message.common.FileMsgProto.FileMsg;
 import com.zc.web.service.PlayerService;
+import com.zc.web.util.TimeUtil;
 
 public class UploadAction extends PBBaseAction {
 
@@ -18,6 +19,7 @@ public class UploadAction extends PBBaseAction {
 
 		File file = new File();
 		PropertyUtils.copyProperties(file, req);
+		file.setCreateTime(TimeUtil.now());
 		reqSession.getPlayer().getFiles().add(file);
 		
 		PlayerService.savePlayer(reqSession.getPlayer());
