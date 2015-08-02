@@ -53,7 +53,7 @@ public class CloseDeputyDebtAction extends BaseAdminAction {
 
 		Player owner = PlayerCache.INSTANCE.getPlayer(debt.getOwnerId());
 		PlayerService.addMoney(owner, ownerMoney, Constant.MONEY_TYPE_CLOSE, Constant.MONEY_PLATFORM_DEFAULT);
-		PlayerService.addSituation(winner, Constant.SITUATION_DEBT_END, String.valueOf(id), String.valueOf(ownerMoney));
+		PlayerService.addSituation(owner, Constant.SITUATION_DEBT_END, String.valueOf(id), String.valueOf(ownerMoney));
 		
 		// 提醒
 		String content = "恭喜完成债务（编号" + debt.getId() + "），佣金（扣除平台服务费）" + (winnerMoney / 100f) + "元已到账，请登录<a href='http://www.ddzhai.cn'>点点债</a>确认！";

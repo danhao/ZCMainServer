@@ -369,7 +369,7 @@ public class DebtService {
 	 * 
 	 * @param debtId
 	 */
-	private static void bondReturn(Debt debt, long playerId){
+	public static void bondReturn(Debt debt, long playerId){
 		// 返还未中标用户保证金
 		int bond = debt.getMoney() * Constant.BOND / 100;	
 		if(bond > Constant.MAX_BOND)
@@ -399,6 +399,15 @@ public class DebtService {
 			p.getFrozenMoney().remove(debt.getId());
 			PlayerService.addMoney(p, bond, Constant.MONEY_TYPE_BOND_RETURN, Constant.MONEY_PLATFORM_DEFAULT, "bond return");
 			PlayerService.addSituation(p, Constant.SITUATION_BOND_RETURN, String.valueOf(debt.getId()), String.valueOf(bond));
+			
+			// 提醒
+			try{
+				String content = "参与投标的债务（编号" + debt.getId() + "）未中标，保证金已返回，请登录<a href='http://www.ddzhai.cn'>点点债</a>确认！";
+				SendSmsThread.inst.addSyncInfo(p.getMobile(), content);
+				SendMailThread.inst.addSyncInfo(p.getEmail(), "关闭提醒", content);
+			}catch(Exception e){
+				
+			}
 		}
 	}
 }
