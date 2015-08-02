@@ -36,7 +36,7 @@ public class ReturnDebtAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
-		if(debt.getOwnerId() != player.getId()){
+		if(debt.getWinnerId() != player.getId()){
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
