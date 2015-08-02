@@ -21,6 +21,7 @@ public class UploadAction extends PBBaseAction {
 		reqSession.getPlayer().getFiles().add(file);
 		
 		PlayerService.savePlayer(reqSession.getPlayer());
+		response.setRsp(reqSession.getPlayer().build());
 	}
 
 }
