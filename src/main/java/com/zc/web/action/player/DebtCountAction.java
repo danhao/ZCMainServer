@@ -10,7 +10,7 @@ import com.zc.web.data.model.Player;
 import com.zc.web.message.PBMessage;
 import com.zc.web.message.common.SingleMsgProto.SingleMsg;
 
-public class DebtCountCmd extends PBBaseAction {
+public class DebtCountAction extends PBBaseAction {
 
 	@Override
 	public void done(PBRequestSession reqSession, PBMessage request,
