@@ -32,7 +32,7 @@ public class ReturnDebtAction extends PBBaseAction {
 		SingleMsg req = (SingleMsg)getReq(request, SingleMsg.newBuilder());
 		
 		Debt debt = DebtService.getDebtById(Long.parseLong(req.getParam()));
-		if(debt == null || debt.getState() != Constant.STATE_PUBLISH){
+		if(debt == null || debt.getState() != Constant.STATE_DEALED){
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		

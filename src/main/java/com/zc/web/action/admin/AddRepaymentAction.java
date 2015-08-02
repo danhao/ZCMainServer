@@ -24,7 +24,7 @@ public class AddRepaymentAction extends BaseAdminAction {
 		pay.setTime(TimeUtil.now());
 		
 		debt.getRepayments().add(0, pay);
-		DebtService.getDebtDao().addRepayment(id, pay);
+		DebtService.getDebtDao().updateRepayments(id, debt.getRepayments());
 		
 		result.put("data", debt);
 	}

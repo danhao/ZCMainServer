@@ -140,14 +140,14 @@ public class DebtDao extends BaseDao<Debt> {
 		}
 	}
 	
-	public void addRepayment(long id, Repayment pay) {
+	public void updateRepayments(long id, List<Repayment> pays) {
 		try {
 			final Datastore ds = getDatastore();
 			
 			Query<Debt> query = ds.find(Debt.class).field(BaseModel.ID_KEY).equal(id);
 			UpdateOperations<Debt> ops = ds.createUpdateOperations(Debt.class).disableValidation();
 			
-			ops.add("repayments", pay);
+			ops.set("repayments", pays);
 			update(query, ops);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
