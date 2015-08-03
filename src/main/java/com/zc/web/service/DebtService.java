@@ -76,6 +76,8 @@ public class DebtService {
 				
 				// 返还保证金
 				bondReturn(debt, debt.getBidId());
+				
+				saveDebt(debt);
 
 				break;
 			case Constant.TYPE_DEPUTY:
@@ -86,6 +88,8 @@ public class DebtService {
 						
 						// 返还保证金
 						bondReturn(debt, 0);
+						
+						saveDebt(debt);
 					}else{
 						// 自动选择
 						if(debt.getIsCorp() == 0){
@@ -94,11 +98,7 @@ public class DebtService {
 									new Comparator<Bidder>() {
 										@Override
 										public int compare(Bidder b1, Bidder b2) {
-											return Integer
-													.valueOf(b1.getRate())
-													.compareTo(
-															Integer.valueOf(b2
-																	.getRate()));
+											return Integer.valueOf(b1.getRate()).compareTo(Integer.valueOf(b2.getRate()));
 										}
 									});
 						}else{
@@ -107,22 +107,19 @@ public class DebtService {
 									new Comparator<Bidder>() {
 										@Override
 										public int compare(Bidder b1, Bidder b2) {
-											return Integer
-													.valueOf(b2.getRating())
-													.compareTo(
-															Integer.valueOf(b1
-																	.getRating()));
+											if(b1.getRating() > 0 || b2.getRating() > 0)
+												return Integer.valueOf(b2.getRating()).compareTo(Integer.valueOf(b1.getRating()));
+											
+											return Integer.valueOf(b1.getRate()).compareTo(Integer.valueOf(b2.getRate()));
 										}
 									});
 						}
 						
-						bidWin(debt.getOwnerId(), debt.getId(), debt.getBidders().get(0).getId());
+						debt = bidWin(debt.getOwnerId(), debt.getId(), debt.getBidders().get(0).getId());
 					}
 				}
 				break;
 			}
-			
-			saveDebt(debt);
 		}
 		
 		return debt;
@@ -234,7 +231,7 @@ public class DebtService {
 		bidder.setId(player.getId());
 		bidder.setName(player.getName());
 		bidder.setCreateTime(TimeUtil.now());
-		bidder.setMoney(bond);
+		bidder.setMoney(money);
 		bidder.setHead(player.getHead());
 		
 		if(money > 0){
@@ -245,7 +242,7 @@ public class DebtService {
 				debt.setBidId(player.getId());
 			}
 			debt.getBidders().add(bidder);
-			DebtService.saveDebt(debt);
+			saveDebt(debt);
 			
 			player.getBidDebts().put(debt.getId(), false);
 		}else{
@@ -278,7 +275,7 @@ public class DebtService {
 	 * @throws Exception
 	 */
 	public static Debt bidWin(long playerId, long debtId, long winnerId) throws Exception{
-		Debt debt = getDebtById(debtId);
+		Debt debt = debtDao.getDebt(debtId);
 		
 		if(debt.getType() != Constant.TYPE_DEPUTY ||
 				debt.getState() != Constant.STATE_PUBLISH ||

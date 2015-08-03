@@ -64,12 +64,12 @@ public class TestClient {
 		try {
 			String createUser = "{'code':2,'req':{'mobile':'133','email':'中文'}}";
 			String login = "{'code':1,'req':{'mobile':'127','passwd':'1111'}}";
-			String bid = "{'code':104,'pid':607097386459729920,'sid':'5d77fa8b-ab67-4ea7-994d-f080fcbf3e4f','req':{'id':'607095292373766144','money':100}}";
+			String bid = "{'code':104,'pid':607007323960905728,'sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'id':'619787660692557824','rate':30}}";
 			String createDebt = "{'code':100,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:2,'money':1014,'creditorName':'haha','files':{'id':'11','name':'test'}}}";
 			String listViewDebts = "{'code':103}"; 
 			String listDebts = "{'code':101,'pid':'619797168072429568','sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:2,state:1,moneyLow:100,moneyUp:1000000,page:20}}";
-			String viewDebt = "{'code':102,'pid':'611160765428142080','sid':'c6b07848-835e-4dab-a847-f2232be581bd','req':{'param':'614690808892755969'}}";
-			String addMessage = "{'code':106,'pid':'607120585767522305','sid':'76085f2b-c46f-4575-855e-6fed59e54d47','req':{'id':'607095292373766144','memo':'xxx'}}";
+			String viewDebt = "{'code':102,'pid':'607007323960905728','sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'param':'619787660692557824'}}";
+			String addMessage = "{'code':106,'pid':'607007323960905728','sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'id':'619787660692557824','files':[{'id':'11','name':'xxx'}]}}";
 			String listSelfDebts = "{'code':107,'pid':'607120585767522305','sid':'76085f2b-c46f-4575-855e-6fed59e54d47','req':{'param':'1'}}";
 			String updatePlayer = "{'code':6,'pid':608932921935400961,'sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'address':'xxcxx'}}";
 			String changePwdOne = "{'code':9,'req':{'email':'tohaodan@163.com'}}";
@@ -109,7 +109,7 @@ public class TestClient {
 			String upload = "{'code':18,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'id':['1111'],'name':'test'}}";
 			String returnDebt = "{'code':109,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'param':'619787660692557824'}}";
 
-			String rsp = post(returnDebt);
+			String rsp = post(viewDebt);
 			System.out.println(rsp);
 		} catch (Exception e) {
 			e.printStackTrace();

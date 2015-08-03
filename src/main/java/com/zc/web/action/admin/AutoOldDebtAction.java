@@ -24,7 +24,7 @@ public class AutoOldDebtAction extends BaseAdminAction {
 			}
 		}
 		
-		result.put("failed", sb.toString());
+		result.put("failIds", sb.toString());
 	}
 
 }

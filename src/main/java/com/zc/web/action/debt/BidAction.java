@@ -46,10 +46,6 @@ public class BidAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
-		if(DebtService.isDebtExpired(debt)){
-			throw new SmallException(ErrorCode.ERR_DEBT_EXPIRED);
-		}
-		
 		if(debt.getIsCorp() > 0 && !PlayerService.checkUserForCorp(player)){
 			throw new SmallException(ErrorCode.ERR_DEBT_NO_CORP);
 		}
