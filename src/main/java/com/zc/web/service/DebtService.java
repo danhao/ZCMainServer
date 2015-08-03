@@ -20,7 +20,6 @@ import com.zc.web.data.model.Player;
 import com.zc.web.exception.SmallException;
 import com.zc.web.message.ErrorCodeProto.ErrorCode;
 import com.zc.web.message.common.FileMsgProto.FileMsg;
-import com.zc.web.message.debt.BidReqProto.BidReq;
 import com.zc.web.message.debt.DebtMsgProto.DebtMsg;
 import com.zc.web.message.debt.ListDebtsReqProto.ListDebtsReq;
 import com.zc.web.message.debt.MessageMsgProto.MessageMsg;
@@ -350,6 +349,12 @@ public class DebtService {
 		
 		Message message = new Message();
 		PropertyUtils.copyProperties(message, msg);
+		
+		for(FileMsg f : msg.getFilesList()){
+			File file = new File();
+			PropertyUtils.copyProperties(file, f);
+			message.getFiles().add(file);
+		}
 		
 		debt.getMessages().add(message);
 		if(debt.getMessages().size() > Constant.MAX_MESSAGE)
