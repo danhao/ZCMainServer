@@ -89,6 +89,8 @@ public class AdminServerHandler extends SimpleChannelInboundHandler<Object> {
 	    			log.info("admin action not found: code=" + reqSession.getActionCode() + ", playerId="+reqSession.getPlayerId());
 	    			sendErrorMsg(ctx.channel(), "管理员命令错误。");
 	    			return;
+	    		}else{
+	    			log.info(uri);
 	    		}
 	    		action.run(reqSession);
 	    		return;
