@@ -44,8 +44,8 @@ public class ReturnDebtAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
-//		if((TimeUtil.now() - debt.getPublishTime()) / Constant.ONE_DAY < 30)
-//			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+		if((TimeUtil.now() - debt.getPublishTime()) / Constant.ONE_DAY < Constant.DEBT_RETURN_LIMIT)
+			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 
 		
 		// 更新单
@@ -70,7 +70,7 @@ public class ReturnDebtAction extends PBBaseAction {
 		Integer money = player.getFrozenMoney().get(debt.getId());
 		if(money != null){
 			player.getFrozenMoney().remove(debt.getId());
-			PlayerService.addMoney(player, money, Constant.MONEY_TYPE_BOND_RETURN, Constant.MONEY_PLATFORM_DEFAULT, "bond return");
+			PlayerService.addMoney(player, money, Constant.MONEY_TYPE_BOND_RETURN, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
 			PlayerService.addSituation(player, Constant.SITUATION_BOND_RETURN, String.valueOf(debt.getId()), String.valueOf(money.intValue()));
 		}
 		

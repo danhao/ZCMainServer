@@ -397,7 +397,7 @@ public class DebtService {
 			}
 			
 			p.getFrozenMoney().remove(debt.getId());
-			PlayerService.addMoney(p, bond, Constant.MONEY_TYPE_BOND_RETURN, Constant.MONEY_PLATFORM_DEFAULT, "bond return");
+			PlayerService.addMoney(p, bond, Constant.MONEY_TYPE_BOND_RETURN, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
 			PlayerService.addSituation(p, Constant.SITUATION_BOND_RETURN, String.valueOf(debt.getId()), String.valueOf(bond));
 			
 			// 提醒
