@@ -82,7 +82,7 @@ public class BidAction extends PBBaseAction {
 		
 		if(!debt.getBondBidders().contains(player.getId())){
 			player.getFrozenMoney().put(debt.getId(), bond);
-			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT);
+			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
 		}
 
 		DebtService.bid(player, debt, bond, req.getMoney(), req.getRate());

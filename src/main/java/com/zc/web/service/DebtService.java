@@ -43,7 +43,7 @@ public class DebtService {
 	public static long TOTAL_DEBTS = 0;
 	
 	public static void init(){
-		List<Debt> list = debtDao.listDebts(SIZE, 0, "-publishTime", Constant.STATE_PUBLISH, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null);
+		List<Debt> list = debtDao.listDebts(8, 0, "-publishTime", Constant.STATE_PUBLISH, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null);
 		if(list != null)
 			latestDebts.addAll(list);
 	}

@@ -32,6 +32,7 @@ public class ListDebtsAction extends PBBaseAction {
 			PropUtil.copyProperties(simpleDebt, debt, SimpleDebtMsg.Builder.getDescriptor());
 			if(debt.getBondBidders().contains(reqSession.getPlayerId()))
 				simpleDebt.setHasBid(1);
+			simpleDebt.setBidCount(debt.getBondBidders().size());
 			rsp.addDebt(simpleDebt.build());
 		}
 		

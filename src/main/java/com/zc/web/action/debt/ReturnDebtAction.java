@@ -44,8 +44,8 @@ public class ReturnDebtAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
-		if((TimeUtil.now() - debt.getPublishTime()) / Constant.ONE_DAY < 30)
-			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+//		if((TimeUtil.now() - debt.getPublishTime()) / Constant.ONE_DAY < 30)
+//			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 
 		
 		// 更新单

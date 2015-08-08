@@ -150,8 +150,10 @@ public class PlayerService {
 	 * @param player
 	 * @param money
 	 */
-	public static void addMoney(Player player, int addMoney, int type, int platform,
-			String... extraMsg) {
+	public static void addMoney(Player player, int addMoney, int type, int platform, String... extraMsg) {
+		addMoney(player, addMoney, type, platform, 0, extraMsg);
+	}
+	public static void addMoney(Player player, int addMoney, int type, int platform, long debtId, String... extraMsg) {
 		if (addMoney <= 0) {
 			return;
 		}
@@ -171,7 +173,7 @@ public class PlayerService {
 		
 		LogUtil.logAddMoney(player.getId(), addMoney, money, player.getMoney(), extraMsg);
 		
-		createMoneyHistory(player, addMoney, type, platform, Constant.MONEY_STATE_SUCC, (extraMsg != null && extraMsg.length > 0)?extraMsg[0]:"");
+		createMoneyHistory(player, addMoney, type, platform, Constant.MONEY_STATE_SUCC, debtId, (extraMsg != null && extraMsg.length > 0)?extraMsg[0]:"");
 	}
 	
 	/**
@@ -223,6 +225,9 @@ public class PlayerService {
 	 * @param money
 	 */
 	public static void consumeMoney(Player player, int money, int type, int platform, String... extLog) throws Exception{
+		consumeMoney(player, money, type, platform, 0, extLog);
+	}
+	public static void consumeMoney(Player player, int money, int type, int platform, long debtId, String... extLog) throws Exception{
 		if (player.getMoney() < money) {
 			logger.error("cost_money|error|" + player.getId() + "|"
 					+ player.getMoney() + "|" + money);
@@ -242,7 +247,7 @@ public class PlayerService {
 		LogUtil.logReduceMoney(player.getId(), money, oldMoney,
 				player.getMoney(), extLog);
 		
-		createMoneyHistory(player, money, type, platform, Constant.MONEY_STATE_SUCC, extLog != null && extLog.length > 0?extLog[0]:"");
+		createMoneyHistory(player, money, type, platform, Constant.MONEY_STATE_SUCC, debtId, extLog != null && extLog.length > 0?extLog[0]:"");
 	}
 	
 	/**
@@ -594,7 +599,7 @@ public class PlayerService {
 	 * @param descript
 	 */
 	private static void createMoneyHistory(Player player, int money, int type, int platform, 
-			int state, String descript){
+			int state, long debtId, String descript){
 		MoneyHistory history = new MoneyHistory();
 		history.setId(IDGenerator.INSTANCE.nextId());
 		history.setMoney(money);
@@ -603,6 +608,8 @@ public class PlayerService {
 		history.setTime(TimeUtil.now());
 		history.setState(state);
 		history.setBalance(player.getMoney());
+		if(debtId > 0)
+			history.setDebtId(String.valueOf(debtId));
 		history.setDescript(descript);
 		
 		player.getHistories().add(history);
