@@ -108,8 +108,9 @@ public class TestClient {
 			String batchBbid = "{'code':108,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'id':['619787660692557824'],'bond':101,'rate':10}}";
 			String upload = "{'code':18,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'id':['1111'],'name':'test'}}";
 			String returnDebt = "{'code':109,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{'param':'619787660692557824'}}";
+			String applyEndDebt = "{'code':110,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{'param':'608933131109535744'}}";
 
-			String rsp = post(viewDebt);
+			String rsp = post(applyEndDebt);
 			System.out.println(rsp);
 		} catch (Exception e) {
 			e.printStackTrace();

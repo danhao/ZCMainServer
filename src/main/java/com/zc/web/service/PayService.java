@@ -2,13 +2,13 @@ package com.zc.web.service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 
 import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.Constant;
+import com.zc.web.core.IDGenerator;
 import com.zc.web.dao.PlayerCashDao;
 import com.zc.web.dao.PlayerOrderDao;
 import com.zc.web.data.model.Player;
@@ -34,17 +34,6 @@ public class PayService {
 	private static PlayerOrderDao orderDao = new PlayerOrderDao();
 	private static PlayerCashDao cashDao = new PlayerCashDao();
 
-	private static Random random = new Random();
-
-	/**
-	 * 主键ID生成 时间+随机（1000~9999）
-	 */
-	public static long generateId() {
-		int ext = random.nextInt(900000) + 100000;
-		String id = System.currentTimeMillis() + String.valueOf(ext);
-		return Long.parseLong(id);
-	}
-
 	public static PlayerOrder getPlayerOrder(long orderId) {
 		return orderDao.getPlayerOrder(orderId);
 	}
@@ -55,7 +44,7 @@ public class PayService {
 
 	public static PlayerOrder createPlayerOrder(Player player, int amount) {
 		PlayerOrder order = new PlayerOrder();
-		order.setId(generateId());
+		order.setId(IDGenerator.INSTANCE.nextId());
 		order.setPlayerId(player.getId());
 		order.setAmount(amount);
 		order.setRealityAmount(0);
@@ -76,7 +65,7 @@ public class PayService {
 		
 		PropertyUtils.copyProperties(cash, msg);
 		
-		cash.setId(generateId());
+		cash.setId(IDGenerator.INSTANCE.nextId());
 		cash.setPlayerId(player.getId());
 		cash.setCreateAt(TimeUtil.dateToString(new Date(), "yyyyMMddHHmmss"));
 		cash.setStatus(ORDER_STATUS_0);
