@@ -32,11 +32,11 @@ public class ApplyEndDebtAction extends PBBaseAction {
 //			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 //		}
 		
-		if(debt.getRepayments().size() == 0)
-			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+//		if(debt.getRepayments().size() == 0)
+//			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		
 
-		ApplyService.createPlayerApply(player.getId(), debtId);
+		ApplyService.createDebtEndApply(player.getId(), debtId);
 	}
 
 }

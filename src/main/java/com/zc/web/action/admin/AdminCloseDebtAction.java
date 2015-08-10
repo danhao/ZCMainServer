@@ -7,6 +7,7 @@ import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.Constant;
 import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.Player;
+import com.zc.web.service.ApplyService;
 import com.zc.web.service.DebtService;
 import com.zc.web.service.PlayerService;
 import com.zc.web.task.SendMailThread;
@@ -26,6 +27,9 @@ public class AdminCloseDebtAction extends BaseAdminAction {
 
 		debt.setState(Constant.STATE_CLOSED);
 		DebtService.saveDebt(debt);
+		
+		// 更新申请
+		ApplyService.updateDebtEndApply(id, 1);
 		
 		Player owner = PlayerCache.INSTANCE.getPlayer(debt.getOwnerId());
 		PlayerService.addSituation(owner, Constant.SITUATION_DEBT_CLOSE, String.valueOf(id));

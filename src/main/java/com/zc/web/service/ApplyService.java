@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import com.zc.web.dao.DebtEndApplyDao;
 import com.zc.web.data.model.DebtEndApply;
-import com.zc.web.data.model.Player;
 import com.zc.web.util.TimeUtil;
 
 /***
@@ -25,7 +24,7 @@ public class ApplyService {
 		dao.save(playerApply);
 	}
 	
-	public static void createPlayerApply(long playerId, long debtId){
+	public static void createDebtEndApply(long playerId, long debtId){
 		DebtEndApply dea = getDebtEndApply(debtId);
 		if(dea == null){
 			dea = new DebtEndApply();
@@ -38,6 +37,17 @@ public class ApplyService {
 
 		saveDebtEndApply(dea);
 	}
+	
+	public static void updateDebtEndApply(long debtId, int status){
+		DebtEndApply dea = getDebtEndApply(debtId);
+		if(dea == null){
+			return;
+		}
+
+		dea.setStatus(status);
+
+		saveDebtEndApply(dea);
+	}	
 	
 	public static DebtEndApply getDebtEndApply(long id){
 		return dao.getDebtEndApply(id);

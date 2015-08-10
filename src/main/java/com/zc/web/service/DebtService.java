@@ -90,6 +90,9 @@ public class DebtService {
 						bondReturn(debt, 0);
 						
 						saveDebt(debt);
+						
+						// 更新申请
+						ApplyService.updateDebtEndApply(id, 1);
 					}else{
 						// 自动选择
 						if(debt.getIsCorp() == 0){
