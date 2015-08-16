@@ -67,13 +67,13 @@ public class DebtDao extends BaseDao<Debt> {
 				type, location, publishDays, moneyLow, moneyUp,
 				expireLow, expireUp, ownerId, deputyId,
 				createTimeFrom, createTimeTo, ids, keyword,
-				null, null, 0, 0);
+				null, null, 0, 0, 0);
 	}
 	public List<Debt> listDebts(int limit, int offset, String order, int state, 
 			int type, String location, int publishDays, int moneyLow, int moneyUp,
 			int expireLow, int expireUp, long ownerId, long deputyId,
 			int createTimeFrom, int createTimeTo, Collection<Long> ids, String keyword,
-			String debtorName, String debtorId, int property, int hand){
+			String debtorName, String debtorId, int property, int hand, int newestMessage){
 		
 		if(ids != null && ids.size() == 0){
 			return new ArrayList<Debt>();
@@ -115,6 +115,8 @@ public class DebtDao extends BaseDao<Debt> {
 				query.field("property").equal(property);
 			if(hand > 0)
 				query.field("debtExpireTime").greaterThanOrEq(TimeUtil.now() - hand * Constant.ONE_DAY);
+			if(newestMessage > 0)
+				query.field("newestMessage").equal(newestMessage);
 			
 			if(keyword != null && !keyword.isEmpty()){
 				query.or(

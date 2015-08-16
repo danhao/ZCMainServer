@@ -342,7 +342,6 @@ public class DebtService {
 	 * @throws Exception
 	 */
 	public static void addBidMessage(Player player, MessageMsg msg) throws Exception{
-		long id = Long.parseLong(msg.getId());
 		Debt debt = getDebtById(Long.parseLong(msg.getId()));
 		if(debt == null)
 			return;
@@ -363,7 +362,9 @@ public class DebtService {
 		if(debt.getMessages().size() > Constant.MAX_MESSAGE)
 			debt.getMessages().remove(0);
 		
-		debtDao.updateMessages(id, debt.getMessages());
+		debt.setNewestMessage(message.getType());
+		
+		saveDebt(debt);
 	}
 	
 	public static DebtDao getDebtDao() {
