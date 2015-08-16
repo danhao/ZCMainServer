@@ -14,11 +14,13 @@ import com.zc.web.core.IDGenerator;
 import com.zc.web.dao.DebtDao;
 import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.Debt.Bidder;
+import com.zc.web.data.model.Debt.Contact;
 import com.zc.web.data.model.Debt.Message;
 import com.zc.web.data.model.File;
 import com.zc.web.data.model.Player;
 import com.zc.web.exception.SmallException;
 import com.zc.web.message.ErrorCodeProto.ErrorCode;
+import com.zc.web.message.common.ContactMsgProto.ContactMsg;
 import com.zc.web.message.common.FileMsgProto.FileMsg;
 import com.zc.web.message.debt.DebtMsgProto.DebtMsg;
 import com.zc.web.message.debt.ListDebtsReqProto.ListDebtsReq;
@@ -340,6 +342,7 @@ public class DebtService {
 	 * @throws Exception
 	 */
 	public static void addBidMessage(Player player, MessageMsg msg) throws Exception{
+		long id = Long.parseLong(msg.getId());
 		Debt debt = getDebtById(Long.parseLong(msg.getId()));
 		if(debt == null)
 			return;
@@ -359,7 +362,8 @@ public class DebtService {
 		debt.getMessages().add(message);
 		if(debt.getMessages().size() > Constant.MAX_MESSAGE)
 			debt.getMessages().remove(0);
-		saveDebt(debt);
+		
+		debtDao.updateMessages(id, debt.getMessages());
 	}
 	
 	public static DebtDao getDebtDao() {
@@ -412,5 +416,28 @@ public class DebtService {
 				
 			}
 		}
+	}
+	
+	/**
+	 * 额外联系方式
+	 * 
+	 * @param player
+	 * @param msg
+	 * @throws Exception
+	 */
+	public static void addContact(Player player, ContactMsg msg) throws Exception{
+		long id = Long.parseLong(msg.getId());
+		Debt debt = getDebtById(id);
+		if(debt == null)
+			return;
+		
+		Contact contact = new Contact();
+		PropertyUtils.copyProperties(contact, msg);
+		
+		debt.getContacts().add(contact);
+		if(debt.getContacts().size() > Constant.MAX_MESSAGE)
+			debt.getContacts().remove(0);
+		
+		debtDao.updateContacts(id, debt.getContacts());
 	}
 }

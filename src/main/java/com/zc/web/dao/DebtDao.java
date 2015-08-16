@@ -12,7 +12,7 @@ import com.google.code.morphia.query.UpdateOperations;
 import com.zc.web.core.Constant;
 import com.zc.web.data.model.BaseModel;
 import com.zc.web.data.model.Debt;
-import com.zc.web.data.model.Debt.Bidder;
+import com.zc.web.data.model.Debt.Contact;
 import com.zc.web.data.model.Debt.Message;
 import com.zc.web.data.model.Debt.Repayment;
 import com.zc.web.exception.DBException;
@@ -63,6 +63,17 @@ public class DebtDao extends BaseDao<Debt> {
 			int type, String location, int publishDays, int moneyLow, int moneyUp,
 			int expireLow, int expireUp, long ownerId, long deputyId,
 			int createTimeFrom, int createTimeTo, Collection<Long> ids, String keyword){
+		return listDebts(limit, offset, order, state, 
+				type, location, publishDays, moneyLow, moneyUp,
+				expireLow, expireUp, ownerId, deputyId,
+				createTimeFrom, createTimeTo, ids, keyword,
+				null, null, 0, 0);
+	}
+	public List<Debt> listDebts(int limit, int offset, String order, int state, 
+			int type, String location, int publishDays, int moneyLow, int moneyUp,
+			int expireLow, int expireUp, long ownerId, long deputyId,
+			int createTimeFrom, int createTimeTo, Collection<Long> ids, String keyword,
+			String debtorName, String debtorId, int property, int hand){
 		
 		if(ids != null && ids.size() == 0){
 			return new ArrayList<Debt>();
@@ -96,6 +107,15 @@ public class DebtDao extends BaseDao<Debt> {
 				query.field("createTime").lessThanOrEq(createTimeTo);
 			if(ids != null)
 				query.field("id").in(ids);
+			if(debtorName != null)
+				query.field("debtorName").equal(debtorName);
+			if(debtorId != null)
+				query.field("debtorId").equal(debtorId);
+			if(property > 0)
+				query.field("property").equal(property);
+			if(hand > 0)
+				query.field("debtExpireTime").greaterThanOrEq(TimeUtil.now() - hand * Constant.ONE_DAY);
+			
 			if(keyword != null && !keyword.isEmpty()){
 				query.or(
 						query.criteria("debtorName").containsIgnoreCase(keyword),
@@ -112,14 +132,14 @@ public class DebtDao extends BaseDao<Debt> {
 		} 
 	}
 	
-	public void addBidder(long id, Bidder bidder) {
+	public void updateContacts(long id, List<Contact> contacts) {
 		try {
 			final Datastore ds = getDatastore();
 			
 			Query<Debt> query = ds.find(Debt.class).field(BaseModel.ID_KEY).equal(id);
 			UpdateOperations<Debt> ops = ds.createUpdateOperations(Debt.class).disableValidation();
 			
-			ops.add("bidders", bidder);
+			ops.set("contacts", contacts);
 			update(query, ops);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
