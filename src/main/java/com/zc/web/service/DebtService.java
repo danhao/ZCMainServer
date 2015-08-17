@@ -432,6 +432,9 @@ public class DebtService {
 		if(debt == null)
 			return;
 		
+		if(player.getId() != debt.getWinnerId())
+			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+		
 		Contact contact = new Contact();
 		PropertyUtils.copyProperties(contact, msg);
 		
