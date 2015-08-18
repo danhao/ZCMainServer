@@ -127,12 +127,34 @@ public class DebtDao extends BaseDao<Debt> {
 						);
 
 			}
-			return query.asList();
+			return query.queryNonPrimary().asList();
 		} catch (Exception e) {
 			log.error("list debt exception "+e.getMessage(), e);
 			throw new DBException(e);
 		} 
 	}
+	
+	public List<Debt> listDebts(long winnerId, int state, int receiveTimeFrom, int receiveTimeTo){
+		
+		final Datastore ds = getDatastore();
+
+		try {
+			Query<Debt> query = ds.find(Debt.class);
+			if(winnerId > 0)
+				query.field("winnerId").equal(winnerId);
+			if(receiveTimeFrom > 0)
+				query.field("receiveTime").greaterThanOrEq(receiveTimeFrom);
+			if(receiveTimeTo > 0)
+				query.field("receiveTime").lessThanOrEq(receiveTimeTo);
+			if(state > 0)
+				query.field("state").equal(state);
+			
+			return query.queryNonPrimary().asList();
+		} catch (Exception e) {
+			log.error("list debt exception "+e.getMessage(), e);
+			throw new DBException(e);
+		} 
+	}	
 	
 	public void updateContacts(long id, List<Contact> contacts) {
 		try {

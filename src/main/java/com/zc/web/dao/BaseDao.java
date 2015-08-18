@@ -17,6 +17,7 @@ import com.mongodb.DBAddress;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.MongoOptions;
+import com.mongodb.ReadPreference;
 import com.mongodb.ServerAddress;
 import com.zc.web.config.GlobalConfig.MongoConfig;
 import com.zc.web.data.model.BaseModel;
@@ -26,11 +27,9 @@ import com.zc.web.server.MainServer;
 public abstract class BaseDao<T extends BaseModel> {
 	
 	private static final Logger log = Logger.getLogger(BaseDao.class);
-	private static Mongo mongo = null;
+	private static Mongo mongoPrimary = null;
+	private static Mongo mongoSecondary = null;
 	private static Morphia morphia = null;
-	
-	private static Mongo globalMongo = null;
-	private static Morphia globalMorphia = null;
 	
 	/**
 	 * 初始化Mongo实例
@@ -39,10 +38,12 @@ public abstract class BaseDao<T extends BaseModel> {
 	 */
 	public static void initMongo() throws Exception {
 		MongoConfig config = MainServer.ZONE.mongoConfig;
-		mongo = createMongo(config);
-		if( mongo == null ) {
+		mongoPrimary = createMongo(config);
+		if( mongoPrimary == null ) {
 			throw new Exception("init mongo db exception, dbName="+config.dbName);
 		}
+		mongoSecondary = createMongo(config);
+		mongoSecondary.setReadPreference(ReadPreference.SECONDARY);
 		
 		MorphiaLoggerFactory.registerLogger(SLF4JLogrImplFactory.class);
 		morphia = new Morphia();
@@ -67,7 +68,6 @@ public abstract class BaseDao<T extends BaseModel> {
 				replset.add(new ServerAddress(config.masterHost, config.masterPort));
 				replset.add(new ServerAddress(config.slaveHost, config.slavePort));
 				mongo = new Mongo(replset, options);
-				mongo.slaveOk();
 				DB db = mongo.getDB("admin");
 				db.authenticate(config.userName, config.password.toCharArray());
 			}else{
@@ -88,9 +88,20 @@ public abstract class BaseDao<T extends BaseModel> {
 	 * @return
 	 */
 	public Datastore getDatastore() {
-		//TODO datasource不能缓存?
-		return morphia.createDatastore(mongo, MainServer.ZONE.mongoConfig.dbName);
+		return morphia.createDatastore(mongoPrimary, MainServer.ZONE.mongoConfig.dbName);
 	}
+	
+	/**
+	 * 只读从库
+	 * 
+	 * @return
+	 */
+	public Datastore getDatastoreReadonly() {
+		if(mongoSecondary != null)
+			return morphia.createDatastore(mongoSecondary, MainServer.ZONE.mongoConfig.dbName);
+		
+		return getDatastore();
+	}	
 
 	/**
 	 * 保存

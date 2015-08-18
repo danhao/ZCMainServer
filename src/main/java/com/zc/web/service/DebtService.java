@@ -16,8 +16,10 @@ import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.Debt.Bidder;
 import com.zc.web.data.model.Debt.Contact;
 import com.zc.web.data.model.Debt.Message;
+import com.zc.web.data.model.Debt.Repayment;
 import com.zc.web.data.model.File;
 import com.zc.web.data.model.Player;
+import com.zc.web.data.model.Stat;
 import com.zc.web.exception.SmallException;
 import com.zc.web.message.ErrorCodeProto.ErrorCode;
 import com.zc.web.message.common.ContactMsgProto.ContactMsg;
@@ -294,6 +296,7 @@ public class DebtService {
 		debt.setWinnerName(winner.getName());
 		debt.setWinnerHead(winner.getHead());
 		debt.setState(Constant.STATE_DEALED);
+		debt.setReceiveTime(TimeUtil.now());
 		for(Bidder b : debt.getBidders()){
 			if(b.getId() == winnerId){
 				debt.setRate(b.getRate());
@@ -443,5 +446,48 @@ public class DebtService {
 			debt.getContacts().remove(0);
 		
 		debtDao.updateContacts(id, debt.getContacts());
+	}
+	
+	/**
+	 * 统计查询
+	 * 
+	 * @param player
+	 * @param winnerId
+	 * @param state
+	 * @param receiveTimeFrom
+	 * @param receiveTimeTo
+	 * @return
+	 */
+	public static Stat queryStat(Player player, int state, int receiveTimeFrom, int receiveTimeTo){
+		String key = player.getId() + "_" + state + "_" + receiveTimeFrom + "_" + receiveTimeTo;
+		Stat stat = player.getStatMap().get(key);
+		if(stat != null)
+			return stat;
+		
+		
+		List<Debt> list = debtDao.listDebts(player.getId(), state, receiveTimeFrom, receiveTimeTo);
+		
+		int money = 0;
+		int repayment = 0;
+		int done = 0;
+		for(Debt debt : list){
+			money += debt.getMoney();
+			for(Repayment repay : debt.getRepayments()){
+				repayment += repay.getMoney();
+			}
+			
+			if(debt.getState() == Constant.STATE_CLOSED && debt.getRepayments().size() > 0)
+				done ++;
+		}
+
+		stat = new Stat();
+		stat.setTotal(list.size());
+		stat.setMoney(money);
+		stat.setDone(done);
+		stat.setRepayment(repayment);
+		
+		player.getStatMap().put(key, stat);
+		
+		return stat;
 	}
 }
