@@ -159,6 +159,12 @@ public class DebtService {
 			debt.getFiles().add(file);
 		}
 		
+		for(ContactMsg contactMsg : msg.getContactsList()){
+			Contact contact = new Contact();
+			PropertyUtils.copyProperties(contact, contactMsg);
+			debt.getContacts().add(contact);
+		}
+		
 		debt.setId(IDGenerator.INSTANCE.nextId());
 		if(admin){
 			debt.setState(Constant.STATE_PUBLISH);
