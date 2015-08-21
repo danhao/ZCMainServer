@@ -105,8 +105,8 @@ public class DebtDao extends BaseDao<Debt> {
 				query.field("createTime").greaterThanOrEq(createTimeFrom);
 			if(createTimeTo > 0)
 				query.field("createTime").lessThanOrEq(createTimeTo);
-			if(ids != null)
-				query.field("id").in(ids);
+//			if(ids != null)
+//				query.field("id").in(ids);
 			if(debtorName != null)
 				query.field("debtorName").equal(debtorName);
 			if(debtorId != null)
