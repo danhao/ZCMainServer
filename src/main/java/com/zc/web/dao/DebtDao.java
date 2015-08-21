@@ -107,9 +107,9 @@ public class DebtDao extends BaseDao<Debt> {
 				query.field("createTime").lessThanOrEq(createTimeTo);
 			if(ids != null)
 				query.field("id").in(ids);
-			if(debtorName != null)
+			if(debtorName != null && !debtorName.isEmpty())
 				query.field("debtorName").equal(debtorName);
-			if(debtorId != null)
+			if(debtorId != null && !debtorId.isEmpty())
 				query.field("debtorId").equal(debtorId);
 			if(property > 0)
 				query.field("property").equal(property);
@@ -129,7 +129,7 @@ public class DebtDao extends BaseDao<Debt> {
 						);
 
 			}
-			return query.asList();
+			return query.queryNonPrimary().asList();
 		} catch (Exception e) {
 			log.error("list debt exception "+e.getMessage(), e);
 			throw new DBException(e);
