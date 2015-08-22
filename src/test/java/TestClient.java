@@ -67,7 +67,7 @@ public class TestClient {
 			String bid = "{'code':104,'pid':607007323960905728,'sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'id':'619787660692557824','rate':30}}";
 			String createDebt = "{'code':100,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{type:2,'money':1014,'creditorName':'haha','contacts':{'name':'11','phone':'test'}}}";
 			String listViewDebts = "{'code':103}"; 
-			String listDebts = "{'code':101,'pid':'619797168072429568','sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:1,state:1,handFrom:1,handTo:2000}}";
+			String listDebts = "{'code':101,'pid':'619797168072429568','sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:1,state:1,handFrom:1,handTo:2000,debtorName:'蔡全'}}";
 			String viewDebt = "{'code':102,'pid':'607007323960905728','sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'param':'619787660692557824'}}";
 			String addMessage = "{'code':106,'pid':'607007323960905728','sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'id':'619787660692557824','files':[{'id':'11','name':'xxx'}]}}";
 			String listSelfDebts = "{'code':107,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{queryType:3,state:3,page:1}}";

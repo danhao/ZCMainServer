@@ -124,8 +124,7 @@ public class DebtDao extends BaseDao<Debt> {
 				query.or(
 						query.criteria("debtorName").containsIgnoreCase(keyword),
 						query.criteria("reason").containsIgnoreCase(keyword),
-						query.criteria("debtorLocation").containsIgnoreCase(keyword),
-						query.criteria("ownerName").containsIgnoreCase(keyword)
+						query.criteria("debtorLocation").containsIgnoreCase(keyword)
 						);
 
 			}
