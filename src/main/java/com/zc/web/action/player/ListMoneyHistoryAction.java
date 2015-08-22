@@ -1,16 +1,21 @@
 package com.zc.web.action.player;
 
+import java.util.List;
+
 import com.zc.web.action.PBBaseAction;
 import com.zc.web.core.PBRequestSession;
-import com.zc.web.data.model.Player.MoneyHistory;
+import com.zc.web.data.model.MoneyHistory;
 import com.zc.web.message.PBMessage;
-import com.zc.web.message.debt.ListMoneyHistoryReqProto.ListMoneyHistoryReq;
+import com.zc.web.message.player.ListMoneyHistoryReqProto.ListMoneyHistoryReq;
 import com.zc.web.message.player.ListMoneyHistoryRspProto.ListMoneyHistoryRsp;
 import com.zc.web.message.player.ListMoneyHistoryRspProto.ListMoneyHistoryRsp.MoneyHistoryMsg;
+import com.zc.web.service.PlayerService;
 import com.zc.web.util.PropUtil;
 
 public class ListMoneyHistoryAction extends PBBaseAction {
 
+	private static final int PAGE_SIZE = 10;
+	
 	@Override
 	public void done(PBRequestSession reqSession, PBMessage request,
 			PBMessage response) throws Exception {
@@ -18,7 +23,10 @@ public class ListMoneyHistoryAction extends PBBaseAction {
 		
 		ListMoneyHistoryRsp.Builder rsp = ListMoneyHistoryRsp.newBuilder();
 		
-		for(MoneyHistory history : reqSession.getPlayer().getHistories()){
+		List<MoneyHistory> list = PlayerService.getMoneyHistoryDao().listMoneyHistory((req.getPage() - 1) * PAGE_SIZE, PAGE_SIZE, 
+				reqSession.getPlayerId(), req.getType(), req.getTimeFrom(), req.getTimeTo());
+		
+		for(MoneyHistory history : list){
 			if(history.getTime() < req.getTimeFrom() || history.getTime() > req.getTimeTo())
 				continue;
 			
