@@ -223,7 +223,8 @@ public class DebtService {
 		return debtDao.listDebts(SIZE, (page - 1) * SIZE, order, req.hasState() ? req.getState() : -1, req.getType(), req.getLocation(),
 				req.getPublishDays(), req.getMoneyLow(), req.getMoneyUp(),
 				req.getExpireLow(), req.getExpireUp(), ownerId, deputyId,
-				req.getCreateTimeFrom(), req.getCreateTimeTo(), ids, req.getKeyword());
+				req.getCreateTimeFrom(), req.getCreateTimeTo(), ids, req.getKeyword(),
+				req.getDebtorName(), req.getDebtorId(), req.getProperty(), req.getHandFrom(), req.getHandTo(), req.getNewestMessage());
 	}
 	
 	/**

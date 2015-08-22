@@ -67,10 +67,10 @@ public class TestClient {
 			String bid = "{'code':104,'pid':607007323960905728,'sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'id':'619787660692557824','rate':30}}";
 			String createDebt = "{'code':100,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{type:2,'money':1014,'creditorName':'haha','contacts':{'name':'11','phone':'test'}}}";
 			String listViewDebts = "{'code':103}"; 
-			String listDebts = "{'code':101,'pid':'619797168072429568','sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:2,state:1,moneyLow:100,moneyUp:1000000,page:20}}";
+			String listDebts = "{'code':101,'pid':'619797168072429568','sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:1,state:1,handFrom:1,handTo:2000}}";
 			String viewDebt = "{'code':102,'pid':'607007323960905728','sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'param':'619787660692557824'}}";
 			String addMessage = "{'code':106,'pid':'607007323960905728','sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'id':'619787660692557824','files':[{'id':'11','name':'xxx'}]}}";
-			String listSelfDebts = "{'code':107,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{queryType:3,state:3,page:1}}";
+			String listSelfDebts = "{'code':107,'pid':619797168072429568,'sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{queryType:3,state:3,page:1}}";
 			String updatePlayer = "{'code':6,'pid':608932921935400961,'sid':'e4162113-61c0-4e8a-83b2-974cc3f1539a','req':{'address':'xxcxx'}}";
 			String changePwdOne = "{'code':9,'req':{'email':'tohaodan@163.com'}}";
 			String changePwdTwo = "{'code':10,'req':{'email':'tohaodan@163.com','code':391919}}";
@@ -112,7 +112,7 @@ public class TestClient {
 			String addContact = "{'code':111,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'id':'625289450133393408','phone':'123','name':'test','type':1,'memo':'xxx'}}";
 			String stat = "{'code':112,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{}}";
 
-			String rsp = post(bidWin);
+			String rsp = post(listDebts);
 			System.out.println(rsp);
 		} catch (Exception e) {
 			e.printStackTrace();

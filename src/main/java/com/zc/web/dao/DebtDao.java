@@ -113,10 +113,10 @@ public class DebtDao extends BaseDao<Debt> {
 				query.field("debtorId").equal(debtorId);
 			if(property > 0)
 				query.field("property").equal(property);
-			if(handFrom > 0)
-				query.field("debtExpireTime").greaterThanOrEq(TimeUtil.now() - handFrom * Constant.ONE_DAY);
 			if(handTo > 0)
-				query.field("debtExpireTime").lessThanOrEq(TimeUtil.now() + handTo * Constant.ONE_DAY);
+				query.field("debtExpireTime").greaterThanOrEq(TimeUtil.now() - handTo * Constant.ONE_DAY);
+			if(handFrom > 0)
+				query.field("debtExpireTime").lessThanOrEq(TimeUtil.now() - handFrom * Constant.ONE_DAY);
 			if(newestMessage > 0)
 				query.field("newestMessage").equal(newestMessage);
 			

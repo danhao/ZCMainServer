@@ -68,7 +68,7 @@ public class UploadThread extends Thread {
 				.replaceFirst("##5", debt.getMoney() / 100f + "元")
 				.replaceFirst("##6", debt.getDebtorName())
 				.replaceFirst("##7", debt.getDebtorAddr())
-				.replaceFirst("##9", debt.getDebtorPhone())
+				.replaceFirst("##9", debt.getContacts().get(0).getPhone())
 				.replaceFirst("##10", debt.getRate() + "%")
 				.replaceFirst("##11", debt.getCreditorName())
 				.replaceFirst("##12", debt.getWinnerName())
