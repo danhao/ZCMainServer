@@ -23,8 +23,10 @@ public class UpdateDebtAction extends BaseAdminAction {
 
 			BeanUtils.setProperty(debt, name, value);
 			
-			if(name.equals("state") && value.equals("1"))
+			if(name.equals("state") && value.equals("1")){
 				debt.setPublishTime(TimeUtil.now());
+				DebtService.updateLatest(debt);
+			}
 		}
 		
 		

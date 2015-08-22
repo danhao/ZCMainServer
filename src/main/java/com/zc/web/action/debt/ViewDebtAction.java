@@ -4,8 +4,10 @@ import com.googlecode.protobuf.format.JsonFormat;
 import com.zc.web.action.PBBaseAction;
 import com.zc.web.core.PBRequestSession;
 import com.zc.web.data.model.Debt;
+import com.zc.web.data.model.DebtEndApply;
 import com.zc.web.message.PBMessage;
 import com.zc.web.message.common.SingleMsgProto.SingleMsg;
+import com.zc.web.service.ApplyService;
 import com.zc.web.service.DebtService;
 import com.zc.web.service.PlayerService;
 
@@ -27,9 +29,19 @@ public class ViewDebtAction extends PBBaseAction {
 				// 验证权限
 				PlayerService.isValidate(reqSession.getPlayer());
 
-				response.setRsp(debt.build(true, false));
+				response.setRsp(debt.build(true, false, 0));
 			}else{
-				response.setRsp(debt.build(false, reqSession.getPlayerId() == debt.getWinnerId()));
+				if(reqSession.getPlayerId() == debt.getWinnerId()){
+					int canEnd = 0;
+					if(debt.getRepayments().size() > 0){
+						DebtEndApply apply = ApplyService.getDebtEndApply(id);
+						if(apply == null || apply.getStatus() == 1)
+							canEnd = 1;
+					}
+					response.setRsp(debt.build(false, true, canEnd));
+				}else{
+					response.setRsp(debt.build(false, false, 0));
+				}
 			}
 		}
 	}

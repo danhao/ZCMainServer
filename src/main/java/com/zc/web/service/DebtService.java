@@ -42,12 +42,13 @@ public class DebtService {
 	
 	// 最新债务的数量
 	public static final int SIZE = 12;
+	public static final int SIZE_MAIN = 8;
 	
 	// 总的数量，定时刷新
 	public static long TOTAL_DEBTS = 0;
 	
 	public static void init(){
-		List<Debt> list = debtDao.listDebts(8, 0, "-publishTime", Constant.STATE_PUBLISH, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null);
+		List<Debt> list = debtDao.listDebts(SIZE_MAIN, 0, "-publishTime", Constant.STATE_PUBLISH, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, null);
 		if(list != null)
 			latestDebts.addAll(list);
 	}
@@ -184,13 +185,6 @@ public class DebtService {
 		saveDebt(debt);
 		
 		PlayerService.savePlayer(player);
-		
-		synchronized(latestDebts){
-			latestDebts.add(debt);
-			if(latestDebts.size() > SIZE){
-				latestDebts.remove(0);
-			}
-		}
 		
 		// 动态
 		PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
@@ -355,7 +349,10 @@ public class DebtService {
 		Debt debt = getDebtById(Long.parseLong(msg.getId()));
 		if(debt == null)
 			return;
-		
+
+		if(debt.getState() != Constant.STATE_DEALED)
+			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+
 		if(player.getId() != debt.getWinnerId())
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		
@@ -496,5 +493,14 @@ public class DebtService {
 		player.getStatMap().put(key, stat);
 		
 		return stat;
+	}
+	
+	public static void updateLatest(Debt debt){
+		synchronized(latestDebts){
+			latestDebts.add(0, debt);
+			if(latestDebts.size() > SIZE_MAIN){
+				latestDebts.remove(latestDebts.size() - 1);
+			}
+		}
 	}
 }
