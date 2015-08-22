@@ -11,10 +11,11 @@ import org.apache.log4j.Logger;
 import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.Constant;
 import com.zc.web.core.IDGenerator;
+import com.zc.web.dao.MoneyHistoryDao;
 import com.zc.web.dao.PlayerDao;
 import com.zc.web.data.model.File;
+import com.zc.web.data.model.MoneyHistory;
 import com.zc.web.data.model.Player;
-import com.zc.web.data.model.Player.MoneyHistory;
 import com.zc.web.data.model.Player.Situation;
 import com.zc.web.exception.SmallException;
 import com.zc.web.message.ErrorCodeProto.ErrorCode;
@@ -36,6 +37,7 @@ public class PlayerService {
 	private static Logger logger = Logger.getLogger(PlayerService.class);
 
 	private static PlayerDao playerDao = new PlayerDao();
+	private static MoneyHistoryDao moneyHistoryDao = new MoneyHistoryDao();
 
 	private static final int SIZE = 10;
 	
@@ -602,6 +604,7 @@ public class PlayerService {
 			int state, long debtId, String descript){
 		MoneyHistory history = new MoneyHistory();
 		history.setId(IDGenerator.INSTANCE.nextId());
+		history.setPlayerId(player.getId());
 		history.setMoney(money);
 		history.setType(type);
 		history.setPlatform(platform);
@@ -612,8 +615,7 @@ public class PlayerService {
 			history.setDebtId(String.valueOf(debtId));
 		history.setDescript(descript);
 		
-		player.getHistories().add(history);
-		savePlayer(player);
+		moneyHistoryDao.save(history);
 	}
 	
 	private static File createFile(FileMsg fileMsg) throws Exception{
@@ -621,6 +623,10 @@ public class PlayerService {
 		PropertyUtils.copyProperties(file, fileMsg);
 		
 		return file;
+	}
+
+	public static MoneyHistoryDao getMoneyHistoryDao() {
+		return moneyHistoryDao;
 	}
 	
 }

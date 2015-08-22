@@ -75,7 +75,7 @@ public class TestClient {
 			String changePwdOne = "{'code':9,'req':{'email':'tohaodan@163.com'}}";
 			String changePwdTwo = "{'code':10,'req':{'email':'tohaodan@163.com','code':391919}}";
 			String changePwdThree = "{'code':11,'req':{'email':'tohaodan@163.com','code':391919, 'passwd':'333'}}";
-			String listMoneyHistory = "{'code':13,'pid':'611160765428142080','sid':'c6b07848-835e-4dab-a847-f2232be581bd','req':{'timeFrom':0,'timeTo':2000000000}}";
+			String listMoneyHistory = "{'code':13,'pid':'614729464269508609','sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'timeFrom':0,'timeTo':2000000000,page:1}}";
 			String createOrder = "{'code':200,'pid':'614766165704577025','sid':'3cbf0fa0-00cd-4aa2-a94b-6306dd694d3f','req':{"
 					+ "'version':'v1.0',"
 					+ "'pickupUrl':'http://203.195.133.243/#/member/',"
@@ -112,7 +112,7 @@ public class TestClient {
 			String addContact = "{'code':111,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'id':'625289450133393408','phone':'123','name':'test','type':1,'memo':'xxx'}}";
 			String stat = "{'code':112,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{}}";
 
-			String rsp = post(listDebts);
+			String rsp = post(listMoneyHistory);
 			System.out.println(rsp);
 		} catch (Exception e) {
 			e.printStackTrace();
