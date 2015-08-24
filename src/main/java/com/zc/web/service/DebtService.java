@@ -407,9 +407,11 @@ public class DebtService {
 				continue;
 			}
 			
-			if(money != bond){
-				logger.info("bondReturn|" + debt.getId() + "|" + money + "|" + bond);
-				continue;
+			if(debt.getType() == Constant.TYPE_DEPUTY){
+				if(money != bond){
+					logger.info("bondReturn|" + debt.getId() + "|" + money + "|" + bond);
+					continue;
+				}
 			}
 			
 			p.getFrozenMoney().remove(debt.getId());

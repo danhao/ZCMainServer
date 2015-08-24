@@ -61,6 +61,9 @@ public class BidAction extends PBBaseAction {
 		if(count > limit){
 			throw new SmallException(ErrorCode.ERR_DEBT_OVER_LIMIT);
 		}
+
+		// 保证金
+		int bond = 0;
 		
 		// 类型
 		if(debt.getType() == Constant.TYPE_BID){
@@ -71,18 +74,23 @@ public class BidAction extends PBBaseAction {
 			if(req.getMoney() < debt.getBidMoney() + debt.getBidIncrease())
 				throw new SmallException(ErrorCode.ERR_DEBT_BID_LOW);
 			
-		}else if(debt.getType() == Constant.TYPE_DEPUTY && req.getRate() <= 0){
-			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
-		}
-
-		// 保证金
-		int bond = debt.getMoney() * Constant.BOND / 100;	
-		if(bond > Constant.MAX_BOND)
-			bond = Constant.MAX_BOND;
-		
-		if(!debt.getBondBidders().contains(player.getId())){
-			player.getFrozenMoney().put(debt.getId(), bond);
+			bond = req.getMoney();
+			
+			Integer frozenMoney = player.getFrozenMoney().get(debt.getId());
+			player.getFrozenMoney().put(debt.getId(), bond + (frozenMoney == null ? 0 : frozenMoney));
 			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
+		}else if(debt.getType() == Constant.TYPE_DEPUTY){
+			if(req.getRate() <= 0)
+				throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+			
+			bond = debt.getMoney() * Constant.BOND / 100;	
+			if(bond > Constant.MAX_BOND)
+				bond = Constant.MAX_BOND;
+			
+			if(!debt.getBondBidders().contains(player.getId())){
+				player.getFrozenMoney().put(debt.getId(), bond);
+				PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
+			}
 		}
 
 		DebtService.bid(player, debt, bond, req.getMoney(), req.getRate());

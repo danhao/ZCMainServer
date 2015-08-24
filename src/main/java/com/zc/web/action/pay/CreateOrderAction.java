@@ -1,7 +1,5 @@
 package com.zc.web.action.pay;
 
-import java.net.URL;
-
 import com.allinpay.ets.client.SecurityUtil;
 import com.zc.web.action.PBBaseAction;
 import com.zc.web.config.GlobalConfig;
