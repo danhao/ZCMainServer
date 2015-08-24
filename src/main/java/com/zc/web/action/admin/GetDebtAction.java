@@ -10,6 +10,6 @@ public class GetDebtAction extends BaseAdminAction {
 	
 	@Override
 	protected void done(String[] ps, Player player, Map<String, Object> result) throws Exception{
-		result.put("data", DebtService.getDebtById(Long.parseLong(ps[0])));
+		result.put("data", DebtService.getDebtById(Long.parseLong(ps[0]), ps[1].equals("1")));
 	}
 }

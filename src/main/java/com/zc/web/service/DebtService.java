@@ -64,10 +64,13 @@ public class DebtService {
 	 * @return
 	 */
 	public static Debt getDebtById(long id) throws Exception{
+		return getDebtById(id, false);
+	}
+	public static Debt getDebtById(long id, boolean forceExpire) throws Exception{
 		Debt debt = debtDao.getDebt(id);
 		
 		// 检查状态
-		if(debt.getState() == Constant.STATE_PUBLISH && isDebtExpired(debt)){
+		if(debt.getState() == Constant.STATE_PUBLISH && (forceExpire || isDebtExpired(debt))){
 			switch(debt.getType()){
 			case Constant.TYPE_BID:
 				debt.setState(Constant.STATE_DEALED);
