@@ -241,6 +241,7 @@ public class DebtService {
 		bidder.setCreateTime(TimeUtil.now());
 		bidder.setMoney(money);
 		bidder.setHead(player.getHead());
+		bidder.setRating(player.getRating());
 		
 		if(money > 0){
 			// 投标
@@ -271,7 +272,7 @@ public class DebtService {
 				player.getBidDebts().put(debt.getId(), false);
 			}
 		}
-	}
+	} 
 	
 	/**
 	 * 中标

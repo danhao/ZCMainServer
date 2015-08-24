@@ -36,7 +36,8 @@ public class ListSelfDebtsAction extends PBBaseAction {
 		for(Debt debt : list){
 			SimpleDebtMsg.Builder simpleDebt = SimpleDebtMsg.newBuilder();
 			PropUtil.copyProperties(simpleDebt, debt, SimpleDebtMsg.Builder.getDescriptor());
-			simpleDebt.setBidCount(debt.getBondBidders().size());
+			if(req.getQueryType() == TYPE_BID)
+				simpleDebt.setBidCount(debt.getBondBidders().size());
 			rsp.addDebt(simpleDebt.build());
 		}
 		
