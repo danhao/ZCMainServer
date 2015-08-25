@@ -86,6 +86,13 @@ public class DebtService {
 				bondReturn(debt, debt.getWinnerId());
 				
 				saveDebt(debt);
+				
+				// 更新用户
+				Player winner = PlayerCache.INSTANCE.getPlayer(debt.getWinnerId());
+				winner.getWinDebts().add(debt.getId());
+				winner.getBidDebts().remove(debt.getId());
+				PlayerService.savePlayer(winner);
+				
 
 				break;
 			case Constant.TYPE_DEPUTY:
