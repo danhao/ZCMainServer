@@ -73,7 +73,7 @@ public class DebtService {
 		if(debt.getState() == Constant.STATE_PUBLISH && (forceExpire || isDebtExpired(debt))){
 			switch(debt.getType()){
 			case Constant.TYPE_BID:
-				debt.setState(Constant.STATE_DEALED);
+				debt.setState(Constant.STATE_CLOSED);
 				debt.setWinnerId(debt.getBidId());
 				for(Bidder b : debt.getBidders()){
 					if(b.getId() == debt.getBidId()){
