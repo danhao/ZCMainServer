@@ -31,20 +31,20 @@ public class BidAction extends PBBaseAction {
 		
 		// 验证权限
 		Player player = reqSession.getPlayer();
-//		PlayerService.isValidate(player);
+		PlayerService.isValidate(player);
 		
 		BidReq.Builder builder = BidReq.newBuilder();
 		JsonFormat.merge(request.getReq(), builder);
 		BidReq req = builder.build();
 		
 		Debt debt = DebtService.getDebtById(Long.parseLong(req.getId()));
-//		if(debt == null || debt.getState() != Constant.STATE_PUBLISH){
-//			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
-//		}
+		if(debt == null || debt.getState() != Constant.STATE_PUBLISH){
+			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+		}
 		
-//		if(debt.getOwnerId() == player.getId()){
-//			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
-//		}
+		if(debt.getOwnerId() == player.getId()){
+			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+		}
 		
 		if(debt.getIsCorp() > 0 && !PlayerService.checkUserForCorp(player)){
 			throw new SmallException(ErrorCode.ERR_DEBT_NO_CORP);
