@@ -31,20 +31,20 @@ public class BidAction extends PBBaseAction {
 		
 		// 验证权限
 		Player player = reqSession.getPlayer();
-		PlayerService.isValidate(player);
+//		PlayerService.isValidate(player);
 		
 		BidReq.Builder builder = BidReq.newBuilder();
 		JsonFormat.merge(request.getReq(), builder);
 		BidReq req = builder.build();
 		
 		Debt debt = DebtService.getDebtById(Long.parseLong(req.getId()));
-		if(debt == null || debt.getState() != Constant.STATE_PUBLISH){
-			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
-		}
+//		if(debt == null || debt.getState() != Constant.STATE_PUBLISH){
+//			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+//		}
 		
-		if(debt.getOwnerId() == player.getId()){
-			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
-		}
+//		if(debt.getOwnerId() == player.getId()){
+//			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+//		}
 		
 		if(debt.getIsCorp() > 0 && !PlayerService.checkUserForCorp(player)){
 			throw new SmallException(ErrorCode.ERR_DEBT_NO_CORP);
@@ -77,8 +77,14 @@ public class BidAction extends PBBaseAction {
 			bond = req.getMoney();
 			
 			Integer frozenMoney = player.getFrozenMoney().get(debt.getId());
-			player.getFrozenMoney().put(debt.getId(), bond + (frozenMoney == null ? 0 : frozenMoney));
-			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
+			if(frozenMoney == null)
+				frozenMoney = 0;
+			
+			if(frozenMoney > bond)
+				throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
+			
+			player.getFrozenMoney().put(debt.getId(), bond);
+			PlayerService.consumeMoney(player, bond - frozenMoney, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
 		}else if(debt.getType() == Constant.TYPE_DEPUTY){
 			if(req.getRate() <= 0)
 				throw new SmallException(ErrorCode.ERR_DEBT_INVALID);

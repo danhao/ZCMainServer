@@ -83,10 +83,7 @@ public class DebtService {
 				}
 				
 				// 返还保证金
-				bondReturn(debt, 0);
-				
-				// 扣除拍卖的费用
-				PlayerService.consumeMoney(PlayerCache.INSTANCE.getPlayer(debt.getWinnerId()), debt.getBidMoney(), Constant.MONEY_TYPE_BUY_DEBT, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
+				bondReturn(debt, debt.getWinnerId());
 				
 				saveDebt(debt);
 
