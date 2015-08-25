@@ -71,7 +71,10 @@ public class BidAction extends PBBaseAction {
 				throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 			
 			// 金额判断
-			if(req.getMoney() < debt.getBidMoney() + debt.getBidIncrease())
+			int money = debt.getPrice();
+			if(debt.getBidMoney() > 0)
+				money = debt.getBidMoney();
+			if(req.getMoney() < money + debt.getBidIncrease())
 				throw new SmallException(ErrorCode.ERR_DEBT_BID_LOW);
 			
 			bond = req.getMoney();
