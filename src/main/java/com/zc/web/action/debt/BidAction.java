@@ -96,10 +96,12 @@ public class BidAction extends PBBaseAction {
 			if(bond > Constant.MAX_BOND)
 				bond = Constant.MAX_BOND;
 			
-			if(!debt.getBondBidders().contains(player.getId())){
-				PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
-				player.getFrozenMoney().put(debt.getId(), bond);
+			if(debt.getBondBidders().contains(player.getId())){
+				throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 			}
+			
+			PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
+			player.getFrozenMoney().put(debt.getId(), bond);
 		}
 
 		DebtService.bid(player, debt, bond, req.getMoney(), req.getRate());
