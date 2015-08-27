@@ -11,7 +11,7 @@ import com.zc.web.message.PBMessage;
 import com.zc.web.message.debt.DebtMsgProto.DebtMsg;
 import com.zc.web.service.DebtService;
 
-public class CreateDebtAction extends PBBaseAction {
+public class CreateUpdateAction extends PBBaseAction {
 
 	@Override
 	public void done(PBRequestSession reqSession, PBMessage request,
@@ -28,7 +28,7 @@ public class CreateDebtAction extends PBBaseAction {
 		
 		String from = reqSession.getChannel().remoteAddress().toString();
 		
-		Debt debt = DebtService.createDebt(builder.build(), reqSession.getPlayer(), from.indexOf("127.0.0.1") >= 0);
+		Debt debt = DebtService.createOrUpdateDebt(builder.build(), reqSession.getPlayer(), from.indexOf("127.0.0.1") >= 0);
 		if(debt != null)
 			response.setRsp(debt.build());
 	}

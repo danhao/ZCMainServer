@@ -77,17 +77,12 @@ public class BidAction extends PBBaseAction {
 			if(req.getMoney() < money + debt.getBidIncrease())
 				throw new SmallException(ErrorCode.ERR_DEBT_BID_LOW);
 			
-			bond = req.getMoney();
-			
-			Integer frozenMoney = player.getFrozenMoney().get(debt.getId());
-			if(frozenMoney == null)
-				frozenMoney = 0;
-			
-			if(frozenMoney > bond)
-				throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
-			
-			PlayerService.consumeMoney(player, bond - frozenMoney, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
-			player.getFrozenMoney().put(debt.getId(), bond);
+			// 未交保证金的先交
+			if(!debt.getBondBidders().contains(player.getId())){
+				bond = debt.getMoney() * Constant.BOND / 100;
+				PlayerService.consumeMoney(player, bond, Constant.MONEY_TYPE_BOND_PAY, Constant.MONEY_PLATFORM_DEFAULT, debt.getId());
+				player.getFrozenMoney().put(debt.getId(), bond);
+			}
 		}else if(debt.getType() == Constant.TYPE_DEPUTY){
 			if(req.getRate() <= 0)
 				throw new SmallException(ErrorCode.ERR_DEBT_INVALID);

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.zc.web.action.BaseAdminAction;
+import com.zc.web.core.Constant;
 import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.Player;
 import com.zc.web.service.DebtService;
@@ -23,7 +24,7 @@ public class UpdateDebtAction extends BaseAdminAction {
 
 			BeanUtils.setProperty(debt, name, value);
 			
-			if(name.equals("state") && value.equals("1")){
+			if(name.equals("state") && value.equals(String.valueOf(Constant.STATE_PUBLISH))){
 				debt.setPublishTime(TimeUtil.now());
 				DebtService.updateLatest(debt);
 			}

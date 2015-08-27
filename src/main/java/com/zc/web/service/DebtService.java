@@ -73,7 +73,7 @@ public class DebtService {
 		if(debt.getState() == Constant.STATE_PUBLISH && (forceExpire || isDebtExpired(debt))){
 			switch(debt.getType()){
 			case Constant.TYPE_BID:
-				debt.setState(Constant.STATE_CLOSED);
+				debt.setState(Constant.STATE_DEALED);
 				debt.setWinnerId(debt.getBidId());
 				for(Bidder b : debt.getBidders()){
 					if(b.getId() == debt.getBidId()){
@@ -160,8 +160,16 @@ public class DebtService {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Debt createDebt(DebtMsg msg, Player player, boolean admin) throws Exception{
-		Debt debt = new Debt();
+	public static Debt createOrUpdateDebt(DebtMsg msg, Player player, boolean admin) throws Exception{
+		Debt debt = null;
+		if(msg.getId() > 0){
+			debt = getDebtById(msg.getId());
+			
+			if(debt.getState() != Constant.STATE_NEW)
+				throw new SmallException(ErrorCode.ERR_DEBT_WRONG_STATE);
+		}else
+			debt = new Debt();
+		
 		PropertyUtils.copyProperties(debt, msg);
 		
 		for(FileMsg fileMsg : msg.getFilesList()){
@@ -197,7 +205,10 @@ public class DebtService {
 		PlayerService.savePlayer(player);
 		
 		// 动态
-		PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
+		if(msg.getId() > 0)
+			PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
+		else
+			PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
 		
 		return debt;
 	}
