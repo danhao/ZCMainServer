@@ -73,27 +73,28 @@ public class DebtService {
 		if(debt.getState() == Constant.STATE_PUBLISH && (forceExpire || isDebtExpired(debt))){
 			switch(debt.getType()){
 			case Constant.TYPE_BID:
-				debt.setState(Constant.STATE_DEALED);
-				debt.setWinnerId(debt.getBidId());
-				for(Bidder b : debt.getBidders()){
-					if(b.getId() == debt.getBidId()){
-						debt.setWinnerName(b.getName());
-						break;
+				if(debt.getBidId() > 0){
+					debt.setState(Constant.STATE_DEALED);
+					debt.setWinnerId(debt.getBidId());
+					for(Bidder b : debt.getBidders()){
+						if(b.getId() == debt.getBidId()){
+							debt.setWinnerName(b.getName());
+							break;
+						}
 					}
+					
+					// 返还保证金
+					bondReturn(debt, debt.getWinnerId());
+					
+					// 更新用户
+					Player winner = PlayerCache.INSTANCE.getPlayer(debt.getWinnerId());
+					winner.getWinDebts().add(debt.getId());
+					winner.getBidDebts().remove(debt.getId());
+					PlayerService.savePlayer(winner);
+				}else{
+					debt.setState(Constant.STATE_CLOSED);
 				}
-				
-				// 返还保证金
-				bondReturn(debt, debt.getWinnerId());
-				
 				saveDebt(debt);
-				
-				// 更新用户
-				Player winner = PlayerCache.INSTANCE.getPlayer(debt.getWinnerId());
-				winner.getWinDebts().add(debt.getId());
-				winner.getBidDebts().remove(debt.getId());
-				PlayerService.savePlayer(winner);
-				
-
 				break;
 			case Constant.TYPE_DEPUTY:
 				if(debt.getState() != Constant.STATE_DEALED){
@@ -162,8 +163,8 @@ public class DebtService {
 	 */
 	public static Debt createOrUpdateDebt(DebtMsg msg, Player player, boolean admin) throws Exception{
 		Debt debt = null;
-		if(msg.getId() > 0){
-			debt = getDebtById(msg.getId());
+		if(msg.getUpdateId() != null && !msg.getUpdateId().isEmpty()){
+			debt = getDebtById(Long.parseLong(msg.getUpdateId()));
 			
 			if(debt.getState() != Constant.STATE_NEW)
 				throw new SmallException(ErrorCode.ERR_DEBT_WRONG_STATE);
@@ -172,12 +173,14 @@ public class DebtService {
 		
 		PropertyUtils.copyProperties(debt, msg);
 		
+		debt.getFiles().clear();
 		for(FileMsg fileMsg : msg.getFilesList()){
 			File file = new File();
 			PropertyUtils.copyProperties(file, fileMsg);
 			debt.getFiles().add(file);
 		}
 		
+		debt.getContacts().clear();
 		for(ContactMsg contactMsg : msg.getContactsList()){
 			Contact contact = new Contact();
 			PropertyUtils.copyProperties(contact, contactMsg);
@@ -205,8 +208,8 @@ public class DebtService {
 		PlayerService.savePlayer(player);
 		
 		// 动态
-		if(msg.getId() > 0)
-			PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
+		if(msg.getUpdateId() != null && !msg.getUpdateId().isEmpty())
+			PlayerService.addSituation(player, Constant.SITUATION_UPDATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
 		else
 			PlayerService.addSituation(player, Constant.SITUATION_CREATE_DEBT, String.valueOf(debt.getType()), String.valueOf(debt.getId()), String.valueOf(debt.getDuration()), String.valueOf(debt.getMoney()));
 		
