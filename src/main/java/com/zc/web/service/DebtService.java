@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
-import org.jfree.util.Log;
 
 import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.Constant;
@@ -169,12 +168,13 @@ public class DebtService {
 			
 			if(debt.getState() != Constant.STATE_NEW)
 				throw new SmallException(ErrorCode.ERR_DEBT_WRONG_STATE);
-		}else
+		}else{
 			debt = new Debt();
+			debt.setId(IDGenerator.INSTANCE.nextId());
+		}
 		
 		PropertyUtils.copyProperties(debt, msg);
 		
-		logger.info(msg.toString());
 		debt.getFiles().clear();
 		for(FileMsg fileMsg : msg.getFilesList()){
 			File file = new File();
@@ -189,7 +189,6 @@ public class DebtService {
 			debt.getContacts().add(contact);
 		}
 		
-		debt.setId(IDGenerator.INSTANCE.nextId());
 		if(admin){
 			debt.setState(Constant.STATE_PUBLISH);
 			debt.setIsCorp(1);
