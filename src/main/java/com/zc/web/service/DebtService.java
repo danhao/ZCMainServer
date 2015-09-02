@@ -164,16 +164,20 @@ public class DebtService {
 	public static Debt createOrUpdateDebt(DebtMsg msg, Player player, boolean admin) throws Exception{
 		Debt debt = null;
 		if(msg.getUpdateId() != null && !msg.getUpdateId().isEmpty()){
-			debt = getDebtById(Long.parseLong(msg.getUpdateId()));
+			long id = Long.parseLong(msg.getUpdateId());
+			debt = getDebtById(id);
 			
 			if(debt.getState() != Constant.STATE_NEW)
 				throw new SmallException(ErrorCode.ERR_DEBT_WRONG_STATE);
+
+			PropertyUtils.copyProperties(debt, msg);
+			debt.setId(id);
 		}else{
 			debt = new Debt();
+			PropertyUtils.copyProperties(debt, msg);
 			debt.setId(IDGenerator.INSTANCE.nextId());
 		}
 		
-		PropertyUtils.copyProperties(debt, msg);
 		
 		debt.getFiles().clear();
 		for(FileMsg fileMsg : msg.getFilesList()){
