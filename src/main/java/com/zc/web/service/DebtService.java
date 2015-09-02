@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
+import org.jfree.util.Log;
 
 import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.Constant;
@@ -174,6 +175,7 @@ public class DebtService {
 		PropertyUtils.copyProperties(debt, msg);
 		
 		debt.getFiles().clear();
+		Log.info("ccc:" + msg.getFilesList().size());
 		for(FileMsg fileMsg : msg.getFilesList()){
 			File file = new File();
 			PropertyUtils.copyProperties(file, fileMsg);
