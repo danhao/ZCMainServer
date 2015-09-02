@@ -175,7 +175,6 @@ public class DebtService {
 		PropertyUtils.copyProperties(debt, msg);
 		
 		debt.getFiles().clear();
-		logger.info("ccc:" + msg.getFilesList().size());
 		for(FileMsg fileMsg : msg.getFilesList()){
 			File file = new File();
 			PropertyUtils.copyProperties(file, fileMsg);
