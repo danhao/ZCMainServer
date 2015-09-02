@@ -28,8 +28,6 @@ public class CreateUpdateAction extends PBBaseAction {
 		
 		DebtMsg.Builder builder = DebtMsg.newBuilder();
 		JsonFormat.merge(request.getReq(), builder);
-		logger.info(request.getReq());
-		logger.info(builder.toString());
 		String from = reqSession.getChannel().remoteAddress().toString();
 		
 		Debt debt = DebtService.createOrUpdateDebt(builder.build(), reqSession.getPlayer(), from.indexOf("127.0.0.1") >= 0);
