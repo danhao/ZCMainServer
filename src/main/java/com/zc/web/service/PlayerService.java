@@ -569,7 +569,10 @@ public class PlayerService {
 	 */
 	public static boolean checkUserForCorp(Player player){
 		if(player.getVip() > 0 || 
-				((player.getStatus() & Constant.USER_ID_VALIDATED) == Constant.USER_ID_VALIDATED &&
+				(
+				((player.getStatus() & Constant.USER_ID_VALIDATED) == Constant.USER_ID_VALIDATED ||
+				(player.getStatus() & Constant.USER_CO_VALIDATED) == Constant.USER_CO_VALIDATED) 
+				&&
 				player.getFileNoneCrime() != null && !player.getFileNoneCrime().getId().isEmpty() 
 						&& player.getFileCredit() != null && !player.getFileCredit().getId().isEmpty()))
 			return true;

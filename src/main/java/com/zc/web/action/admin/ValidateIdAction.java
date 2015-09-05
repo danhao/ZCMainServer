@@ -20,14 +20,14 @@ public class ValidateIdAction extends BaseAdminAction {
 		}else{
 			player.setStatus(player.getStatus() | state);
 			player.setValidateTime(TimeUtil.now());
-			
-//			if(state == Constant.USER_ID_VALIDATED)
-//				player.setIdValidating(0);
-//			else if(state == Constant.USER_CO_VALIDATED)
-//				player.setCoValidating(0);
 		}
-		player.setIdValidating(0);
-		player.setCoValidating(0);
+		
+		if(state == Constant.USER_ID_VALIDATED)
+			player.setIdValidating(0);
+		else if(state == Constant.USER_CO_VALIDATED){
+			player.setType(Constant.USER_TYPE_CORP);
+			player.setCoValidating(0);
+		}
 		
 		PlayerService.savePlayer(player);
 		

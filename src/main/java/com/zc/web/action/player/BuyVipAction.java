@@ -9,7 +9,6 @@ import com.zc.web.data.model.Player;
 import com.zc.web.exception.SmallException;
 import com.zc.web.message.ErrorCodeProto.ErrorCode;
 import com.zc.web.message.PBMessage;
-import com.zc.web.message.common.SingleMsgProto.SingleMsg;
 import com.zc.web.service.PlayerService;
 
 public class BuyVipAction extends PBBaseAction {
@@ -17,7 +16,7 @@ public class BuyVipAction extends PBBaseAction {
 	@Override
 	public void done(PBRequestSession reqSession, PBMessage request,
 			PBMessage response) throws Exception {
-		SingleMsg req = (SingleMsg)getReq(request, SingleMsg.newBuilder());
+//		SingleMsg req = (SingleMsg)getReq(request, SingleMsg.newBuilder());
 		
 		ConfigVip config = ConfigHelper.getConfigVip(1);
 		if(config == null){
@@ -25,8 +24,13 @@ public class BuyVipAction extends PBBaseAction {
 		}
 		
 		Player player = reqSession.getPlayer();
+		
+		if(player.getStatus() < Constant.USER_ID_VALIDATED){
+			throw new SmallException(ErrorCode.ERR_SYSTEM);
+		}
+		
 		int money = 0;
-		if(req.getParam().equals("0"))
+		if(player.getType() == Constant.USER_TYPE_PERSONAL)
 			money = config.getCost() * 100;
 		else
 			money = config.getCostCo() * 100;
