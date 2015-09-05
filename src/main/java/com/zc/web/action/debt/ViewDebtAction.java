@@ -2,6 +2,7 @@ package com.zc.web.action.debt;
 
 import com.googlecode.protobuf.format.JsonFormat;
 import com.zc.web.action.PBBaseAction;
+import com.zc.web.core.Constant;
 import com.zc.web.core.PBRequestSession;
 import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.DebtEndApply;
@@ -33,7 +34,9 @@ public class ViewDebtAction extends PBBaseAction {
 			}else{
 				if(reqSession.getPlayerId() == debt.getWinnerId()){
 					int canEnd = 0;
-					if(debt.getRepayments().size() > 0){
+					if(debt.getType() == Constant.TYPE_BID){
+						canEnd = 1;
+					}else if(debt.getRepayments().size() > 0){
 						DebtEndApply apply = ApplyService.getDebtEndApply(id);
 						if(apply == null || apply.getStatus() == 1)
 							canEnd = 1;
