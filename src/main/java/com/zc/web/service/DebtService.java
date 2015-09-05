@@ -197,6 +197,7 @@ public class DebtService {
 			debt.setState(Constant.STATE_PUBLISH);
 			debt.setIsCorp(1);
 			debt.setPublishTime(TimeUtil.now());
+			updateLatest(debt);
 		}
 		debt.setCreateTime(TimeUtil.now());
 		debt.setOwnerId(player.getId());
