@@ -30,7 +30,7 @@ public class ApplyEndDebtAction extends PBBaseAction {
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		}
 		
-		if(debt.getRepayments().size() == 0)
+		if(debt.getType() == Constant.TYPE_DEPUTY && debt.getRepayments().size() == 0)
 			throw new SmallException(ErrorCode.ERR_DEBT_INVALID);
 		
 
