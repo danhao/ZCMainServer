@@ -632,4 +632,15 @@ public class PlayerService {
 		return moneyHistoryDao;
 	}
 	
+	public static void updateCreditorPath(long playerId, int oldState, int newState){
+		Player player = PlayerCache.INSTANCE.getPlayer(playerId);
+		if(oldState > -1)
+			player.getPathCreditor()[oldState] --;
+		
+		if(newState > -1)
+			player.getPathCreditor()[newState] ++;
+		
+		savePlayer(player);
+	}
+	
 }

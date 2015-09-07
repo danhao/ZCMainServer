@@ -9,6 +9,7 @@ import com.zc.web.core.Constant;
 import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.Player;
 import com.zc.web.service.DebtService;
+import com.zc.web.service.PlayerService;
 import com.zc.web.util.TimeUtil;
 
 public class UpdateDebtAction extends BaseAdminAction {
@@ -24,9 +25,13 @@ public class UpdateDebtAction extends BaseAdminAction {
 
 			BeanUtils.setProperty(debt, name, value);
 			
-			if(name.equals("state") && value.equals(String.valueOf(Constant.STATE_PUBLISH))){
-				debt.setPublishTime(TimeUtil.now());
-				DebtService.updateLatest(debt);
+			if(name.equals("state")){
+				PlayerService.updateCreditorPath(debt.getOwnerId(), debt.getState(), Integer.parseInt(value));
+				
+				if(value.equals(String.valueOf(Constant.STATE_PUBLISH))){
+					debt.setPublishTime(TimeUtil.now());
+					DebtService.updateLatest(debt);
+				}
 			}
 		}
 		

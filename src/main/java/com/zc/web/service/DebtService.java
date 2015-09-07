@@ -198,7 +198,10 @@ public class DebtService {
 			debt.setIsCorp(1);
 			debt.setPublishTime(TimeUtil.now());
 			updateLatest(debt);
-		}
+			PlayerService.updateCreditorPath(player.getId(), -1, Constant.STATE_PUBLISH);
+		}else
+			PlayerService.updateCreditorPath(player.getId(), -1, Constant.STATE_NEW);
+		
 		debt.setCreateTime(TimeUtil.now());
 		debt.setOwnerId(player.getId());
 		debt.setOwnerName(player.getName());
