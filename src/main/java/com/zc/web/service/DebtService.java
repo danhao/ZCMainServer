@@ -74,7 +74,7 @@ public class DebtService {
 			switch(debt.getType()){
 			case Constant.TYPE_BID:
 				if(debt.getBidId() > 0){
-					debt.setState(Constant.STATE_DEALED);
+					DebtService.updateState(debt, Constant.STATE_DEALED);
 					debt.setWinnerId(debt.getBidId());
 					for(Bidder b : debt.getBidders()){
 						if(b.getId() == debt.getBidId()){
@@ -84,15 +84,19 @@ public class DebtService {
 					}
 					
 					// 返还保证金
-					bondReturn(debt, debt.getWinnerId());
+					bondReturn(debt, debt.getWinnerId(), Constant.DEPUTY_STATE_BID, Constant.DEPUTY_STATE_LOSE);
 					
 					// 更新用户
 					Player winner = PlayerCache.INSTANCE.getPlayer(debt.getWinnerId());
 					winner.getWinDebts().add(debt.getId());
 					winner.getBidDebts().remove(debt.getId());
 					PlayerService.savePlayer(winner);
+					
+					// 统计
+					PlayerService.updateDeputyPath(winner, Constant.DEPUTY_STATE_BID, Constant.DEPUTY_STATE_WIN);
 				}else{
-					debt.setState(Constant.STATE_CLOSED);
+//					debt.setState(Constant.STATE_CLOSED);
+					DebtService.updateState(debt, Constant.STATE_CLOSED);
 				}
 				saveDebt(debt);
 				break;
@@ -100,11 +104,8 @@ public class DebtService {
 				if(debt.getState() != Constant.STATE_DEALED){
 					if(debt.getBidders().size() == 0){
 						// 无人应标
-						debt.setState(Constant.STATE_CLOSED);
-						
-						// 返还保证金
-						bondReturn(debt, 0);
-						
+//						debt.setState(Constant.STATE_CLOSED);
+						DebtService.updateState(debt, Constant.STATE_CLOSED);
 						saveDebt(debt);
 						
 						// 更新申请
@@ -176,8 +177,10 @@ public class DebtService {
 			debt = new Debt();
 			PropertyUtils.copyProperties(debt, msg);
 			debt.setId(IDGenerator.INSTANCE.nextId());
+			debt.setOwnerId(player.getId());
+			debt.setOwnerName(player.getName());
+			DebtService.updateState(debt, Constant.STATE_NEW);
 		}
-		
 		
 		debt.getFiles().clear();
 		for(FileMsg fileMsg : msg.getFilesList()){
@@ -194,17 +197,14 @@ public class DebtService {
 		}
 		
 		if(admin){
-			debt.setState(Constant.STATE_PUBLISH);
+//			debt.setState(Constant.STATE_PUBLISH);
+			DebtService.updateState(debt, Constant.STATE_PUBLISH);
 			debt.setIsCorp(1);
 			debt.setPublishTime(TimeUtil.now());
 			updateLatest(debt);
-			PlayerService.updateCreditorPath(player.getId(), -1, Constant.STATE_PUBLISH);
-		}else
-			PlayerService.updateCreditorPath(player.getId(), -1, Constant.STATE_NEW);
+		}
 		
 		debt.setCreateTime(TimeUtil.now());
-		debt.setOwnerId(player.getId());
-		debt.setOwnerName(player.getName());
 		if(debt.getCreditorName().isEmpty())
 			debt.setCreditorName(player.getName());
 		
@@ -276,6 +276,11 @@ public class DebtService {
 		bidder.setHead(player.getHead());
 		bidder.setRating(player.getRating());
 		
+		// 统计
+		if(!player.getBidDebts().containsKey(debt.getId())){
+			PlayerService.updateDeputyPath(player, -1, Constant.DEPUTY_STATE_BID);
+		}
+		
 		if(money > 0){
 			// 投标
 			bidder.setMoney(money);
@@ -330,7 +335,8 @@ public class DebtService {
 		debt.setWinnerId(winnerId);
 		debt.setWinnerName(winner.getName());
 		debt.setWinnerHead(winner.getHead());
-		debt.setState(Constant.STATE_DEALED);
+//		debt.setState(Constant.STATE_DEALED);
+		DebtService.updateState(debt, Constant.STATE_DEALED);
 		debt.setReceiveTime(TimeUtil.now());
 		for(Bidder b : debt.getBidders()){
 			if(b.getId() == winnerId){
@@ -345,8 +351,11 @@ public class DebtService {
 		winner.getBidDebts().remove(debt.getId());
 		PlayerService.savePlayer(winner);
 		
+		// 统计
+		PlayerService.updateDeputyPath(winner, Constant.DEPUTY_STATE_BID, Constant.DEPUTY_STATE_WIN);
+		
 		// 返还保证金
-		bondReturn(debt, winnerId);
+		bondReturn(debt, winnerId, Constant.DEPUTY_STATE_BID, Constant.DEPUTY_STATE_LOSE);
 		
 		// 生成协议
 		UploadThread.inst.addSyncInfo(debt);
@@ -418,7 +427,7 @@ public class DebtService {
 	 * 
 	 * @param debtId
 	 */
-	public static void bondReturn(Debt debt, long playerId){
+	public static void bondReturn(Debt debt, long playerId, int oldState, int newState){
 		// 返还未中标用户保证金
 		int bond = debt.getMoney() * Constant.BOND / 100;	
 		if(bond > Constant.MAX_BOND)
@@ -431,6 +440,9 @@ public class DebtService {
 			
 			Player p = PlayerCache.INSTANCE.getPlayer(id);
 			
+			// 统计
+			PlayerService.updateDeputyPath(p, oldState, newState);
+
 			// 结束
 			p.getBidDebts().put(debt.getId(), true);
 			
@@ -538,5 +550,10 @@ public class DebtService {
 				latestDebts.remove(latestDebts.size() - 1);
 			}
 		}
+	}
+	
+	public static void updateState(Debt debt, int state){
+		PlayerService.updateCreditorPath(debt.getOwnerId(), debt.getState(), state);
+		debt.updateState(state);
 	}
 }

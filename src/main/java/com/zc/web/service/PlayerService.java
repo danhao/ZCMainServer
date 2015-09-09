@@ -13,6 +13,8 @@ import com.zc.web.core.Constant;
 import com.zc.web.core.IDGenerator;
 import com.zc.web.dao.MoneyHistoryDao;
 import com.zc.web.dao.PlayerDao;
+import com.zc.web.data.model.Debt;
+import com.zc.web.data.model.Debt.Bidder;
 import com.zc.web.data.model.File;
 import com.zc.web.data.model.MoneyHistory;
 import com.zc.web.data.model.Player;
@@ -632,15 +634,61 @@ public class PlayerService {
 		return moneyHistoryDao;
 	}
 	
+	/**
+	 * 更新发布人统计
+	 * 
+	 * @param playerId
+	 * @param oldState
+	 * @param newState
+	 */
 	public static void updateCreditorPath(long playerId, int oldState, int newState){
 		Player player = PlayerCache.INSTANCE.getPlayer(playerId);
-		if(oldState > -1)
-			player.getPathCreditor()[oldState] --;
 		
-		if(newState > -1)
+		if(oldState == newState){
 			player.getPathCreditor()[newState] ++;
-		
+		}else{
+			if(oldState > -1 && player.getPathCreditor()[oldState] > 0)
+				player.getPathCreditor()[oldState] --;
+			
+			if(newState > -1)
+				player.getPathCreditor()[newState] ++;
+		}
 		savePlayer(player);
 	}
 	
+	/**
+	 * 更新催债人统计
+	 * 
+	 * @param playerId
+	 * @param oldState
+	 * @param newState
+	 */
+	public static void updateDeputyPath(Player player, int oldState, int newState){
+		if(oldState == newState){
+			player.getPathDeputy()[newState] ++;
+		}else{
+			if(oldState > -1 && player.getPathDeputy()[oldState] > 0)
+				player.getPathDeputy()[oldState] --;
+			
+			if(newState > -1)
+				player.getPathDeputy()[newState] ++;
+		}
+		savePlayer(player);
+	}
+	
+	/**
+	 * 结束批量更新状态
+	 * 
+	 * @param debt
+	 */
+	public static void updateDeputyPathByDebt(Debt debt){
+		for(long id : debt.getBondBidders()){
+			Player player = PlayerCache.INSTANCE.getPlayer(id);
+			if(id == debt.getWinnerId()){
+				updateDeputyPath(player, Constant.DEPUTY_STATE_WIN, Constant.DEPUTY_STATE_DONE);
+			}else{
+				updateDeputyPath(player, Constant.DEPUTY_STATE_LOSE, Constant.DEPUTY_STATE_CLOSE);
+			}
+		}
+	}
 }

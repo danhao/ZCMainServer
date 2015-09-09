@@ -49,7 +49,8 @@ public class ReturnDebtAction extends PBBaseAction {
 
 		
 		// 更新单
-		debt.setState(Constant.STATE_PUBLISH);
+//		debt.setState(Constant.STATE_PUBLISH);
+		DebtService.updateState(debt, Constant.STATE_PUBLISH);
 		debt.setPublishTime(TimeUtil.now());
 		debt.getBidders().clear();
 		debt.getBondBidders().clear();

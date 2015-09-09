@@ -22,12 +22,12 @@ public class AdminCloseDebtAction extends BaseAdminAction {
 		// 修改状态
 		Debt debt = DebtService.getDebtById(id);
 		
-		// 返还保证金
-		DebtService.bondReturn(debt, 0L);
-
-		debt.setState(Constant.STATE_CLOSED);
+		DebtService.updateState(debt, Constant.STATE_CLOSED);
 		DebtService.saveDebt(debt);
-		
+
+		// 返还保证金
+		DebtService.bondReturn(debt, 0L, Constant.DEPUTY_STATE_BID, Constant.DEPUTY_STATE_CLOSE);
+
 		// 更新申请
 		ApplyService.updateDebtEndApply(id, 1);
 		

@@ -65,7 +65,7 @@ public class TestClient {
 			String createUser = "{'code':2,'req':{'mobile':'133','email':'中文'}}";
 			String login = "{'code':1,'req':{'mobile':'127','passwd':'1111'}}";
 			String bid = "{'code':104,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{'id':'634179179310485505','money':110}}";
-			String createDebt = "{'code':100,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{updateId:'639088468961529857',type:2,'money':1018,'creditorName':'haha',expireDays:5,'files':[{'name':'screenshot6.jpg','id':'test1'},{'name':'screenshot7.jpg','id':'test2'}]}}";
+			String createDebt = "{'code':100,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{updateId:'',type:2,'money':1018,'creditorName':'haha',expireDays:5,'files':[{'name':'screenshot6.jpg','id':'test1'},{'name':'screenshot7.jpg','id':'test2'}]}}";
 			String listViewDebts = "{'code':103}"; 
 			String listDebts = "{'code':101,'pid':'619797168072429568','sid':'a0030677-1d65-4bf2-b7d3-891c6e2ca667','req':{type:1,state:1,handFrom:1,handTo:2000,debtorName:'蔡全'}}";
 			String viewDebt = "{'code':102,'pid':'607007323960905728','sid':'9b04640a-63ac-49fd-acdc-e948e936d752','req':{'param':'619787660692557824'}}";
@@ -111,8 +111,9 @@ public class TestClient {
 			String applyEndDebt = "{'code':110,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'param':'625289450133393408'}}";
 			String addContact = "{'code':111,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'id':'625289450133393408','phone':'123','name':'test','type':1,'memo':'xxx'}}";
 			String stat = "{'code':112,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{}}";
+			String getUser = "{'code':3,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{}}";
 
-			String rsp = post(createDebt);
+			String rsp = post(bidWin);
 			System.out.println(rsp);
 		} catch (Exception e) {
 			e.printStackTrace();

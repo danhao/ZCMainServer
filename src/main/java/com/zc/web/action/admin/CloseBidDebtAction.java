@@ -26,7 +26,8 @@ public class CloseBidDebtAction extends BaseAdminAction {
 			throw new Exception();
 		}
 		
-		debt.setState(Constant.STATE_CLOSED);
+//		debt.setState(Constant.STATE_CLOSED);
+		DebtService.updateState(debt, Constant.STATE_CLOSED);
 		DebtService.saveDebt(debt);
 		
 		// 更新申请
@@ -46,5 +47,8 @@ public class CloseBidDebtAction extends BaseAdminAction {
 		String content = "恭喜完成债务（编号" + debt.getId() + "），保证金" + (bondMoney / 100f) + "元已退回，请登录<a href='http://www.ddzhai.cn'>点点债</a>确认！";
 		SendSmsThread.inst.addSyncInfo(winner.getMobile(), content);
 		SendMailThread.inst.addSyncInfo(winner.getEmail(), "结单提醒", content);
+
+		// 批量更新统计
+		PlayerService.updateDeputyPathByDebt(debt);
 	}
 }
