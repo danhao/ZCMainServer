@@ -28,7 +28,7 @@ public class ListRepayAction extends PBBaseAction {
 
 		List<DebtRepay> list = DebtService.listRepay((req.getPage() - 1) * DebtService.SIZE, DebtService.SIZE, 
 				req.getDebtId(), req.getOwnerId(), req.getDeputyId(), 
-				req.getTimeFrom(), req.getTimeTo());
+				req.getTimeFrom(), req.getTimeTo(), req.getDebtorName());
 		
 		ListRepayRsp.Builder rsp = ListRepayRsp.newBuilder();
 		for(DebtRepay repay : list){

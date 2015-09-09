@@ -35,7 +35,7 @@ public class AddRepaymentAction extends BaseAdminAction {
 		repay.setDebtId(debt.getId());
 		repay.setOwnerId(debt.getOwnerId());
 		repay.setDeputyId(debt.getWinnerId());
-		repay.setCreditorName(debt.getCreditorName());
+		repay.setDebtorName(debt.getDebtorName());
 		repay.setReceiveTime(debt.getReceiveTime());
 		repay.setState(debt.getState());
 		repay.setMoney(debt.getMoney());

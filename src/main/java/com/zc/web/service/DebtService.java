@@ -562,7 +562,7 @@ public class DebtService {
 	}
 	
 	public static List<DebtRepay> listRepay(int offset, int limit, String debtId,  
-			String ownerId, String deputyId, int timeFrom, int timeTo){
+			String ownerId, String deputyId, int timeFrom, int timeTo, String debtorName){
 		long debtId_ = 0;
 		long ownerId_ = 0;
 		long deputyId_ = 0;
@@ -577,7 +577,7 @@ public class DebtService {
 		if(ownerId_ == 0 && deputyId_ == 0)
 			return new ArrayList<DebtRepay>();
 		
-		return repayDao.listDebtRepay(offset, limit, debtId_, ownerId_, deputyId_, timeFrom, timeTo);
+		return repayDao.listDebtRepay(offset, limit, debtId_, ownerId_, deputyId_, timeFrom, timeTo, debtorName);
 	}
 
 	public static DebtRepayDao getRepayDao() {
