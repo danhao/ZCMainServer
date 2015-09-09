@@ -12,11 +12,13 @@ import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.Constant;
 import com.zc.web.core.IDGenerator;
 import com.zc.web.dao.DebtDao;
+import com.zc.web.dao.DebtRepayDao;
 import com.zc.web.data.model.Debt;
 import com.zc.web.data.model.Debt.Bidder;
 import com.zc.web.data.model.Debt.Contact;
 import com.zc.web.data.model.Debt.Message;
 import com.zc.web.data.model.Debt.Repayment;
+import com.zc.web.data.model.DebtRepay;
 import com.zc.web.data.model.File;
 import com.zc.web.data.model.Player;
 import com.zc.web.data.model.Stat;
@@ -37,6 +39,8 @@ public class DebtService {
 	private static Logger logger = Logger.getLogger(DebtService.class);
 
 	private static DebtDao debtDao = new DebtDao();
+	private static DebtRepayDao repayDao = new DebtRepayDao();
+	
 	// 最新的债务
 	private static List<Debt> latestDebts = new ArrayList<Debt>();
 	
@@ -555,5 +559,28 @@ public class DebtService {
 	public static void updateState(Debt debt, int state){
 		PlayerService.updateCreditorPath(debt.getOwnerId(), debt.getState(), state);
 		debt.updateState(state);
+	}
+	
+	public static List<DebtRepay> listRepay(int offset, int limit, String debtId,  
+			String ownerId, String deputyId, int timeFrom, int timeTo){
+		long debtId_ = 0;
+		long ownerId_ = 0;
+		long deputyId_ = 0;
+		
+		if(!debtId.isEmpty())
+			debtId_ = Long.parseLong(debtId);
+		if(!ownerId.isEmpty())
+			ownerId_ = Long.parseLong(ownerId);
+		if(!deputyId.isEmpty())
+			deputyId_ = Long.parseLong(deputyId);
+		
+		if(ownerId_ == 0 && deputyId_ == 0)
+			return new ArrayList<DebtRepay>();
+		
+		return repayDao.listDebtRepay(offset, limit, debtId_, ownerId_, deputyId_, timeFrom, timeTo);
+	}
+
+	public static DebtRepayDao getRepayDao() {
+		return repayDao;
 	}
 }
