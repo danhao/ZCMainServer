@@ -35,6 +35,7 @@ public class PayServerHandler extends SimpleChannelInboundHandler<Object> {
 		}
 		
 		// TODO 限制IP
+		log.info("pay:" + clientIP);
 		
 		if ("/favicon.ico".equals(request.getUri())) {
 	        return;
