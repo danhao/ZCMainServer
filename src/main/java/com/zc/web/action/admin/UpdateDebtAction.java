@@ -23,8 +23,6 @@ public class UpdateDebtAction extends BaseAdminAction {
 			String name = ps[i];
 			String value = ps[++i];
 
-			BeanUtils.setProperty(debt, name, value);
-			
 			if(name.equals("state")){
 				PlayerService.updateCreditorPath(debt.getOwnerId(), debt.getState(), Integer.parseInt(value));
 				
@@ -33,6 +31,8 @@ public class UpdateDebtAction extends BaseAdminAction {
 					DebtService.updateLatest(debt);
 				}
 			}
+
+			BeanUtils.setProperty(debt, name, value);
 		}
 		
 		
