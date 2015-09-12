@@ -45,6 +45,10 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 			ByteBuf content = req.content();
 			String data = URLDecoder.decode(content.toString(CharsetUtil.UTF_8),"utf-8");
 			log.info("data:" + data);
+			if(data.trim().isEmpty()){
+				NettyUtil.sendHttpResponse(ctx.channel(), "no data!");
+				return;
+			}
 			Document doc = DocumentHelper.parseText(data);
 			Element root = doc.getRootElement();
 			String action = root.elementTextTrim("action");
@@ -63,6 +67,7 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 			NettyUtil.sendHttpResponse(ctx.channel(), body);
 		}else{
 			log.error(req.getMethod() + " not supported!");
+			NettyUtil.sendHttpResponse(ctx.channel(), req.getMethod() + " not supported!");
 			return;
 		}
 		
