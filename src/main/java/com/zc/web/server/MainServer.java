@@ -50,6 +50,11 @@ public class MainServer {
         payBootstrap.bind(new InetSocketAddress(ZONE.host, ZONE.payPort)).sync().channel();
         log.info("pay server started at host="+ZONE.host+" port=" + ZONE.payPort + ".");
 
+        //初始化外呼鉴权服务器(HTTP服务器)
+        ServerBootstrap callBootstrap = new ServerBootstrap();
+        callBootstrap.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new CallServerInitializer());
+        callBootstrap.bind(new InetSocketAddress(ZONE.host, ZONE.callPort)).sync().channel();
+        log.info("call server started at host="+ZONE.host+" port=" + ZONE.callPort + ".");
 	}
 	
 	private static void initThread() throws Exception{
