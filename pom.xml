@@ -93,5 +93,10 @@
 		  <artifactId>allinpay-security</artifactId>
 		  <version>2015.1.14</version>
 		</dependency>
+		<dependency>
+		  <groupId>com.cloopen.rest</groupId>
+		  <artifactId>cloopen</artifactId>
+		  <version>2.7</version>
+		</dependency>		
 	</dependencies>
 </project>

@@ -112,7 +112,7 @@ public class TestClient {
 			String addContact = "{'code':111,'pid':614729464269508609,'sid':'d0423b45-7491-4412-a401-db459cdb39d9','req':{'id':'625289450133393408','phone':'123','name':'test','type':1,'memo':'xxx'}}";
 			String stat = "{'code':112,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{}}";
 			String getUser = "{'code':3,'pid':606342446812499968,'sid':'8c9e6ff5-dd09-4883-9499-40ad14d353c5','req':{}}";
-			String listRepay = "{'code':113,'pid':619034302981607425,'sid':'f0f171dd-6ecf-4266-a619-79ffe1381b9c','req':{'ownerId':'634622307993653248', page:1}}";
+			String listRepay = "{'code':113,'pid':619034302981607425,'sid':'f0f171dd-6ecf-4266-a619-79ffe1381b9c','req':{'ownerId':'634622307993653248','deputyId':'634622307993653248', page:1,timeFrom: 1441036800, timeTo: 1451900800}}";
 			
 			String rsp = post(listRepay);
 			System.out.println(rsp);

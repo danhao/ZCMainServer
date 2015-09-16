@@ -15,9 +15,12 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import com.zc.web.cache.PlayerCache;
 import com.zc.web.core.model.CallAuthen;
 import com.zc.web.core.model.CallEstablish;
 import com.zc.web.core.model.CallHangup;
+import com.zc.web.data.model.Player;
+import com.zc.web.service.CallService;
 import com.zc.web.util.NettyUtil;
 
 /**
@@ -62,7 +65,10 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 			} else if (action.equals("Hangup")) {
 				// 解析挂断请求
 				body = parseHangup(root);
-			}
+			} else if (action.equals("AccountLookup")) {
+				// 解析挂断请求
+				body = parseAccountLookup(root);
+			} 
 
 			NettyUtil.sendHttpResponse(ctx.channel(), body);
 		}else{
@@ -155,6 +161,21 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 		String result = "<?xml version='1.0' encoding='UTF-8'?><Response><statuscode>0000</statuscode><statusmsg>Success</statusmsg><totalfee>0.120000</totalfee></Response>";
 		
 		return result;
+	}
+	
+	private String parseAccountLookup(Element e){
+		String id = e.elementTextTrim("id");
+		
+		Player player = PlayerCache.INSTANCE.getPlayer(Long.parseLong(id));
+		if(player.getVoipId() == null){
+			CallService.createSubAccount(player);
+		}
+		
+		if(player.getVoipId() != null){
+			return "<?xml version='1.0' encoding='UTF-8'?><Response><dname>" + id + "</dname><voipid>" + player.getVoipId() + "</voipid><voippwd>" + player.getVoipPwd() + "</voippwd><hash>" + id + "</hash></Response>";
+		}
+		
+		return "<?xml version='1.0' encoding='UTF-8'?><Response></Response>";
 	}
 
 }
