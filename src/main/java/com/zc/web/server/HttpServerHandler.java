@@ -66,6 +66,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 			
 			// validate by email TODO
 			String[] tmp = s.split("_");
+			if(tmp.length < 2)
+				return;
+			
 			NettyUtil.sendHttpResponse(ctx.channel(), PlayerService.processValidateEmail(Long.parseLong(tmp[0]), tmp[1]));
 			return;
 		}else{
