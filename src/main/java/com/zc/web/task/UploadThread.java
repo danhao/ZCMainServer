@@ -8,8 +8,7 @@ import java.util.Calendar;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.zc.web.data.model.Debt;
 import com.zc.web.util.FileUtil;
@@ -21,7 +20,7 @@ import com.zc.web.util.StringUtil;
  */
 public class UploadThread extends Thread {
 	public static UploadThread inst = new UploadThread();
-	private static final Logger log = LoggerFactory.getLogger(UploadThread.class);
+	private static Logger log = Logger.getLogger(UploadThread.class);
 	private LinkedBlockingQueue<Debt> operaQueue = new LinkedBlockingQueue<Debt>();
 	
 	private static String template = null;
