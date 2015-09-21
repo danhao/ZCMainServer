@@ -1,12 +1,12 @@
 package com.zc.web.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.cloopen.rest.sdk.CCPRestSDK;
-import com.zc.web.cache.PlayerCache;
 import com.zc.web.data.model.Player;
 
 /**
@@ -49,8 +49,10 @@ public class CallService {
 		if("000000".equals(result.get("statusCode"))){
 			//正常返回输出data包体信息（map）
 			Map<String, Object> data = (HashMap<String, Object>) result.get("data");
-			player.setVoipId((String)data.get("voipAccount"));
-			player.setVoipPwd((String)data.get("voipPwd"));
+			List list = (List)data.get("SubAccount");
+			Map<String, Object> data1 = (HashMap<String, Object>)list.get(0);
+			player.setVoipId((String)data1.get("voipAccount"));
+			player.setVoipPwd((String)data1.get("voipPwd"));
 			
 			PlayerService.savePlayer(player);
 		}else{

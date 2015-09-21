@@ -76,26 +76,43 @@ public class Test {
 		// UpdateReq req = builder.build();
 		// System.out.println(req.hasAddress() + " " + req.hasAccountPermit());
 
+//		HttpClient client = new HttpClient();
+//		PostMethod method = new PostMethod(
+//				"https://p.apicloud.com/api/push/message");
+//
+//		String now = String.valueOf(System.currentTimeMillis());
+//		String appKey = DigestUtils.sha1Hex("A6981212595108"+"UZ"+ "AF12E5F0-F2E2-A95A-9034-205350752240"+"UZ"+now)+"."+now;
+//		
+//		method.addRequestHeader("X-APICloud-AppId", "A6981212595108");
+//		method.addRequestHeader("X-APICloud-AppKey", appKey);
+//		method.addRequestHeader("Content-Type", "application/json;charset=utf-8");
+//		
+//		JSONObject json = new JSONObject();
+//		json.put("title", "test123中文");
+//		json.put("content", "t");
+//		json.put("type", "1");
+//		json.put("platform", "0");
+//		
+//		RequestEntity requestEntity = new StringRequestEntity(json.toJSONString(), "application/json","utf-8");
+//		method.setRequestEntity(requestEntity);
+////		method.setRequestBody(json.toJSONString());
+//		
+//		client.executeMethod(method);
+//		
+//		// 打印服务器返回的状态
+//		System.out.println(method.getStatusLine());
+//		// 打印返回的信息
+//		System.out.println(method.getResponseBodyAsString());
+//		// 释放连接
+//		method.releaseConnection();
+		
 		HttpClient client = new HttpClient();
 		PostMethod method = new PostMethod(
-				"https://p.apicloud.com/api/push/message");
+				"http://127.0.0.1:33001");
 
-		String now = String.valueOf(System.currentTimeMillis());
-		String appKey = DigestUtils.sha1Hex("A6981212595108"+"UZ"+ "AF12E5F0-F2E2-A95A-9034-205350752240"+"UZ"+now)+"."+now;
-		
-		method.addRequestHeader("X-APICloud-AppId", "A6981212595108");
-		method.addRequestHeader("X-APICloud-AppKey", appKey);
-		method.addRequestHeader("Content-Type", "application/json;charset=utf-8");
-		
-		JSONObject json = new JSONObject();
-		json.put("title", "test123中文");
-		json.put("content", "t");
-		json.put("type", "1");
-		json.put("platform", "0");
-		
-		RequestEntity requestEntity = new StringRequestEntity(json.toJSONString(), "application/json","utf-8");
+		String s = "<?xml version='1.0' encoding='utf-8'?><Request><action>AccountLookup</action><id>614729464269508609</id><type>token</type></Request>";
+		RequestEntity requestEntity = new StringRequestEntity(s, "application/json","utf-8");
 		method.setRequestEntity(requestEntity);
-//		method.setRequestBody(json.toJSONString());
 		
 		client.executeMethod(method);
 		
