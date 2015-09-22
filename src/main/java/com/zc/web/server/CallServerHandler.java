@@ -168,11 +168,11 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 		
 		Player player = PlayerCache.INSTANCE.getPlayer(Long.parseLong(id));
 		if(player != null){
-			if(player.getVoipId() == null && player.getVoipId().isEmpty()){
+			if(player.getVoipId() == null){
 				CallService.createSubAccount(player);
 			}
 			
-			if(player.getVoipId() != null && !player.getVoipId().isEmpty()){
+			if(player.getVoipId() != null){
 				return "<?xml version='1.0' encoding='UTF-8'?><Response><dname>" + id + "</dname><voipid>" + player.getVoipId() + "</voipid><voippwd>" + player.getVoipPwd() + "</voippwd><hash>" + id + "</hash></Response>";
 			}
 		}

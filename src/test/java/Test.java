@@ -110,7 +110,7 @@ public class Test {
 		PostMethod method = new PostMethod(
 				"http://119.29.139.33:33001");
 
-		String s = "<?xml version='1.0' encoding='utf-8'?><Request><action>AccountLookup</action><id>614729464269508609</id><type>token</type></Request>";
+		String s = "<?xml version='1.0' encoding='utf-8'?><Request><action>AccountLookup</action><id>641899824160968705</id><type>token</type></Request>";
 		RequestEntity requestEntity = new StringRequestEntity(s, "application/json","utf-8");
 		method.setRequestEntity(requestEntity);
 		
