@@ -691,4 +691,12 @@ public class PlayerService {
 			}
 		}
 	}
+	
+	public static Player getPlayerByVoip(String voip){
+		Player player = playerDao.getPlayerByVoip(voip);
+		if(player != null)
+			return PlayerCache.INSTANCE.getPlayer(player.getId());
+		
+		return null;
+	}
 }

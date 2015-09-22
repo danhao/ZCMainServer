@@ -43,6 +43,7 @@ public class CallHangup {
 	private String billdata;
 	private String callSid;
 	private String recordurl;
+	private int talkDuration;
 	
 	public String getRecordurl() {
 		return recordurl;
@@ -134,5 +135,13 @@ public class CallHangup {
 	@Override
 	public String toString(){
 		return "CallHangup [type = "+type+", orderId = "+type+", subId = "+subId+", caller = "+caller+", called = "+called+", byeType = "+byeType+", starttime = "+starttime+", endtime = "+endtime+", billdata = "+billdata+", callSid = "+callSid+", recordurl = "+recordurl+"]";
+	}
+
+	public int getTalkDuration() {
+		return talkDuration;
+	}
+
+	public void setTalkDuration(int talkDuration) {
+		this.talkDuration = talkDuration;
 	}
 }

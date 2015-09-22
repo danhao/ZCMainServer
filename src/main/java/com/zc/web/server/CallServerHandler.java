@@ -21,6 +21,7 @@ import com.zc.web.core.model.CallEstablish;
 import com.zc.web.core.model.CallHangup;
 import com.zc.web.data.model.Player;
 import com.zc.web.service.CallService;
+import com.zc.web.service.PlayerService;
 import com.zc.web.util.NettyUtil;
 
 /**
@@ -47,7 +48,6 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 		if(req.getMethod() == HttpMethod.POST){
 			ByteBuf content = req.content();
 			String data = URLDecoder.decode(content.toString(CharsetUtil.UTF_8),"utf-8");
-			log.info("data:" + data);
 			if(data.trim().isEmpty()){
 				NettyUtil.sendHttpResponse(ctx.channel(), "no data!");
 				return;
@@ -85,9 +85,6 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 	 * @return result
 	 */
 	private String parseCallAuth(Element e) {
-		log
-				.info("--- parseCallAuth   start ---");
-		
 		CallAuthen call = new CallAuthen();
 		call.setType(e.elementTextTrim("type"));
 		call.setOrderId(e.elementTextTrim("orderid"));
@@ -95,8 +92,11 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 		call.setCaller(e.elementTextTrim("caller"));
 		call.setCalled(e.elementTextTrim("called"));
 		call.setCallSid(e.elementTextTrim("callSid"));
-		log.info(" --- parseCallAuth --- :"+call.toString());
+		
 		//请在此处增加逻辑判断代码
+		Player player = PlayerService.getPlayerByVoip(call.getCaller());
+		if(player == null)
+			return "<?xml version='1.0' encoding='UTF-8'?><Response></Response>";
 		
 		//返回的数据,如果需要控制呼叫时长需要增加sessiontime
 		String result = "<?xml version='1.0' encoding='UTF-8' ?><Response><statuscode>0000</statuscode><statusmsg>Success</statusmsg><record>1</record></Response>";
@@ -109,9 +109,6 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 	 * @return result
 	 */
 	private String parseCallEstablish(Element e) {
-		log
-				.info("--- parseCallEstablish   start   ");
-				
 		CallEstablish call = new CallEstablish();
 		call.setType(e.elementTextTrim("type"));
 		call.setOrderId(e.elementTextTrim("orderid"));
@@ -119,16 +116,14 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 		call.setCaller(e.elementTextTrim("caller"));
 		call.setCalled(e.elementTextTrim("called"));
 		call.setCallSid(e.elementTextTrim("callSid"));
-		log.info(" --- CallEstablish --- : " + call.toString());
 		//请在此处增加逻辑判断代码
+		Player player = PlayerService.getPlayerByVoip(call.getCaller());
+		if(player == null)
+			return "<?xml version='1.0' encoding='UTF-8'?><Response></Response>";
 		
 		//返回的数据,如果需要控制呼叫时长需要增加sessiontime
 		String result = "<?xml version='1.0' encoding='UTF-8' ?><Response><statuscode>0000</statuscode><statusmsg>Success</statusmsg><billdata>ok</billdata></Response>";
 		
-		
-		log
-				.info("--- parseCallEstablish   end ---");
-
 		return result;
 	}
 	
@@ -138,8 +133,6 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 	 * @return result
 	 */
 	private String parseHangup(Element e) {
-		log
-				.info("---parseHangup   start---");
 		// 封装 CallHangup
 		CallHangup call = new CallHangup();
 		call.setType(e.elementTextTrim("type"));
@@ -153,12 +146,18 @@ public class CallServerHandler extends SimpleChannelInboundHandler<Object> {
 		call.setBilldata(e.elementTextTrim("billdata"));
 		call.setCallSid(e.elementTextTrim("callSid"));
 		call.setRecordurl(e.elementTextTrim("recordurl"));
+		call.setTalkDuration(Integer.parseInt(e.elementTextTrim("recordurl")));
 		
-		log.info(" --- CallHangup --- : " + call.toString());
 		//请在此处增加逻辑判断代码
+		Player player = PlayerService.getPlayerByVoip(call.getCaller());
+		if(player == null)
+			return "<?xml version='1.0' encoding='UTF-8'?><Response></Response>";
+		
+		player.setTalkDuration(player.getTalkDuration() + call.getTalkDuration());
+		PlayerService.savePlayer(player);
 		
 		//返回的数据
-		String result = "<?xml version='1.0' encoding='UTF-8'?><Response><statuscode>0000</statuscode><statusmsg>Success</statusmsg><totalfee>0.120000</totalfee></Response>";
+		String result = "<?xml version='1.0' encoding='UTF-8'?><Response><statuscode>0000</statuscode><statusmsg>Success</statusmsg><totalfee>0</totalfee></Response>";
 		
 		return result;
 	}
