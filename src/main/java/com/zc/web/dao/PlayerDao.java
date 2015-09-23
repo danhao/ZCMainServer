@@ -110,6 +110,24 @@ public class PlayerDao extends BaseDao<Player> {
 		return player;
 	}
 	
+	public Player getPlayerByVoip(String voip) {
+		final Datastore ds = getDatastore();
+
+		Player player = null;
+		try {
+			Query<Player> query = ds.find(Player.class);
+			query.field("voip").equal(voip);
+			List<Player> list = query.asList();
+			if( list.size()>0 ){
+				return list.get(0);
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new DBException(e);
+		} 
+		return player;
+	}
+	
 	public List<Player> listPlayerForValidate(int offset, int limit, long id, int type) {
 		final Datastore ds = getDatastore();
 
