@@ -17,7 +17,7 @@ public class StatAction extends PBBaseAction {
 		StatReq req = (StatReq)getReq(request, StatReq.newBuilder());
 		
 		Stat stat = DebtService.queryStat(reqSession.getPlayer(), req.getState(), 
-				req.getReceiveTimeFrom(), req.getReceiveTimeTo());
+				req.getReceiveTimeFrom(), req.getReceiveTimeTo(), req.getType());
 		
 		StatRsp.Builder rsp = StatRsp.newBuilder();
 		PropUtil.copyProperties(rsp, stat, StatRsp.Builder.getDescriptor());

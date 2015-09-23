@@ -135,14 +135,18 @@ public class DebtDao extends BaseDao<Debt> {
 		} 
 	}
 	
-	public List<Debt> listDebts(long winnerId, int state, int receiveTimeFrom, int receiveTimeTo){
+	public List<Debt> listDebts(long winnerId, int state, int receiveTimeFrom, int receiveTimeTo, int type){
 		
 		final Datastore ds = getDatastore();
 
 		try {
 			Query<Debt> query = ds.find(Debt.class);
-			if(winnerId > 0)
-				query.field("winnerId").equal(winnerId);
+			if(winnerId > 0){
+				if(type == 1)
+					query.field("ownerId").equal(winnerId);
+				else
+					query.field("winnerId").equal(winnerId);
+			}
 			if(receiveTimeFrom > 0)
 				query.field("receiveTime").greaterThanOrEq(receiveTimeFrom);
 			if(receiveTimeTo > 0)

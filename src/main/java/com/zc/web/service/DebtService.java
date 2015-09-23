@@ -514,14 +514,14 @@ public class DebtService {
 	 * @param receiveTimeTo
 	 * @return
 	 */
-	public static Stat queryStat(Player player, int state, int receiveTimeFrom, int receiveTimeTo){
+	public static Stat queryStat(Player player, int state, int receiveTimeFrom, int receiveTimeTo, int type){
 		String key = player.getId() + "_" + state + "_" + receiveTimeFrom + "_" + receiveTimeTo;
 		Stat stat = player.getStatMap().get(key);
 		if(stat != null)
 			return stat;
 		
 		
-		List<Debt> list = debtDao.listDebts(player.getId(), state, receiveTimeFrom, receiveTimeTo);
+		List<Debt> list = debtDao.listDebts(player.getId(), state, receiveTimeFrom, receiveTimeTo, type);
 		
 		int money = 0;
 		int repayment = 0;
