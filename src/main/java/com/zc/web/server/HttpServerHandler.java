@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.util.CharsetUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 
 import org.apache.log4j.Logger;
@@ -79,13 +80,21 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<Object> {
 		long playerId = 0;
 		int actCode = 0;
 		try{
+			String clientIP = req.headers().get("X-Forwarded-For");
+			if (clientIP == null) {
+				InetSocketAddress insocket = (InetSocketAddress) ctx.channel().remoteAddress();
+				clientIP = insocket.getAddress().getHostAddress();
+			}
+			
 			JSONObject json = JSON.parseObject(data);
 			PBMessage request = new PBMessage(
 					json.getIntValue("code"), 
 					json.getString("pid"),
 					json.getString("sid"),
 					json.getString("req"));
-		
+
+			request.setClientIp(clientIP);
+			
 			if(request.getPid() != null)
 				playerId = Long.parseLong(request.getPid());
 			
