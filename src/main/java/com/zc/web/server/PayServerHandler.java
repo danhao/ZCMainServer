@@ -72,11 +72,13 @@ public class PayServerHandler extends SimpleChannelInboundHandler<Object> {
 					+ tranIP + "]respCode=[" + respCode
 					+ "]gopayServerTime=[]VerficationCode=[" + GlobalConfig.ALLINPAY.key
 					+ "]";
+			log.info(plain);
 			String signValue = MD5.encode(plain);
-					
+			log.info(signValue + ":" + signValueFromGopay);
+			
 			if(signValue.equals(signValueFromGopay)){
 				// 商户订单处理
-				boolean ret = PayService.rechargePlayerOrder(Long.parseLong(merRemark1), Long.parseLong(merOrderNum), Integer.parseInt(tranAmt), merOrderNum);
+				boolean ret = PayService.rechargePlayerOrder(Long.parseLong(merRemark1), Long.parseLong(merOrderNum), Integer.parseInt(tranAmt) * 100, merOrderNum);
 				
 				if(ret){
 					log.info("succ|" + merRemark1 + "|" + merOrderNum + "|" + tranAmt);
