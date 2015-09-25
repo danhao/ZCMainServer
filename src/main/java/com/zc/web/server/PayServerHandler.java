@@ -83,7 +83,7 @@ public class PayServerHandler extends SimpleChannelInboundHandler<Object> {
 				
 				if(ret){
 					log.info("succ|" + merRemark1 + "|" + merOrderNum + "|" + amt);
-					NettyUtil.sendHttpResponse(ctx.channel(), "RespCode=0000|JumpURL=http://www.ddzhai.cn/#!/member");
+					NettyUtil.sendHttpResponse(ctx.channel(), "RespCode=0000|JumpURL=");
 					return;
 				}else
 					log.info("fail|" + merRemark1 + "|" + merOrderNum + "|" + amt);
