@@ -8,6 +8,7 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.log4j.Logger;
 
 import com.zc.web.action.PBBaseAction;
 import com.zc.web.config.GlobalConfig;
@@ -21,6 +22,7 @@ import com.zc.web.service.PayService;
 import com.zc.web.util.MD5;
 
 public class CreateOrderAction extends PBBaseAction {
+	private static final Logger logger = Logger.getLogger(CreateOrderAction.class);
 	
 	@Override
 	public void done(PBRequestSession reqSession, PBMessage request,
@@ -43,7 +45,9 @@ public class CreateOrderAction extends PBBaseAction {
 
 		// 构造订单请求对象，生成signMsg。
 		String plain = "version=[" + version + "]tranCode=[" + tranCode + "]merchantID=[" + merchantID + "]merOrderNum=[" + merOrderNum + "]tranAmt=[" + tranAmt + "]feeAmt=[" + feeAmt+ "]tranDateTime=[" + tranDateTime + "]frontMerUrl=[" + frontMerUrl + "]backgroundMerUrl=[" + backgroundMerUrl + "]orderId=[]gopayOutOrderId=[]tranIP=[" + request.getClientIp() + "]respCode=[]gopayServerTime=[" + gopayServerTime + "]VerficationCode=[" + GlobalConfig.ALLINPAY.key + "]";
+		logger.info(plain);
 		String signValue = MD5.encode(plain);
+		logger.info("signValue:" + signValue);
 		
 		CreateOrderRsp.Builder ret = CreateOrderRsp.newBuilder();
 		ret.setBackgroundMerUrl(backgroundMerUrl);
@@ -52,6 +56,7 @@ public class CreateOrderAction extends PBBaseAction {
 		ret.setSignValue(signValue);
 		ret.setMerRemark1(String.valueOf(reqSession.getPlayerId()));
 		ret.setMerOrderNum(merOrderNum);
+		ret.setTransIp(request.getClientIp());
 		
 		response.setRsp(ret.build());
 	}
