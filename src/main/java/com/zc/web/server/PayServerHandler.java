@@ -78,14 +78,15 @@ public class PayServerHandler extends SimpleChannelInboundHandler<Object> {
 			
 			if(signValue.equals(signValueFromGopay)){
 				// 商户订单处理
-				boolean ret = PayService.rechargePlayerOrder(Long.parseLong(merRemark1), Long.parseLong(merOrderNum), Integer.parseInt(tranAmt) * 100, merOrderNum);
+				int amt = Integer.parseInt(tranAmt) * 100;
+				boolean ret = PayService.rechargePlayerOrder(Long.parseLong(merRemark1), Long.parseLong(merOrderNum), amt, merOrderNum);
 				
 				if(ret){
-					log.info("succ|" + merRemark1 + "|" + merOrderNum + "|" + tranAmt);
+					log.info("succ|" + merRemark1 + "|" + merOrderNum + "|" + amt);
 					NettyUtil.sendHttpResponse(ctx.channel(), "RespCode=0000|JumpURL=");
 					return;
 				}else
-					log.info("fail|" + merRemark1 + "|" + merOrderNum + "|" + tranAmt);
+					log.info("fail|" + merRemark1 + "|" + merOrderNum + "|" + amt);
 			}
 
 			NettyUtil.sendHttpResponse(ctx.channel(), "RespCode=9999|JumpURL=");
