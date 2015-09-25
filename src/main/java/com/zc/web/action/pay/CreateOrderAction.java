@@ -40,7 +40,7 @@ public class CreateOrderAction extends PBBaseAction {
 		String tranDateTime = req.getTranDateTime();
 		String gopayServerTime = getGopayServerTime();
 		
-		PlayerOrder order = PayService.createPlayerOrder(reqSession.getPlayer(), Integer.parseInt(tranAmt));
+		PlayerOrder order = PayService.createPlayerOrder(reqSession.getPlayer(), Integer.parseInt(tranAmt) * 100);
 		String merOrderNum = String.valueOf(order.getId());
 
 		// 构造订单请求对象，生成signMsg。
