@@ -116,7 +116,7 @@ public class PlayerDao extends BaseDao<Player> {
 		Player player = null;
 		try {
 			Query<Player> query = ds.find(Player.class);
-			query.field("voip").equal(voip);
+			query.field("voipId").equal(voip);
 			List<Player> list = query.asList();
 			if( list.size()>0 ){
 				return list.get(0);
