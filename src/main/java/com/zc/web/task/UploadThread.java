@@ -46,7 +46,6 @@ public class UploadThread extends Thread {
         br.close();  
 
         template = sb.toString();
-        log.info(template);
 	}
 	
 	/**
