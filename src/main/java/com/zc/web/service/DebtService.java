@@ -177,6 +177,8 @@ public class DebtService {
 
 			PropertyUtils.copyProperties(debt, msg);
 			debt.setId(id);
+			debt.setOwnerId(player.getId());
+			debt.setOwnerName(player.getName());
 		}else{
 			debt = new Debt();
 			PropertyUtils.copyProperties(debt, msg);
